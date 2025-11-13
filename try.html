@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Your Name – Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #020617;
+      --accent: #38bdf8;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(16px);
+      background: rgba(15, 23, 42, 0.85);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .nav {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.25rem;
+      font-size: 0.9rem;
+    }
+
+    .nav-links a {
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -0.2rem;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.2s ease-out;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 3.5rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 2.5rem;
+      align-items: center;
+      padding: 2.5rem 2rem;
+      margin-top: 1.5rem;
+      background: radial-gradient(circle at top left, #1f2937 0, #020617 55%);
+      border-radius: 1.5rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 24px 80px rgba(15, 23, 42, 0.7);
+    }
+
+    .hero-title {
+      font-size: clamp(2rem, 3vw + 1rem, 2.75rem);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-subtitle {
+      color: var(--accent);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 0.16em;
+      margin-bottom: 1rem;
+    }
+
+    .hero-text {
+      color: var(--muted);
+      font-size: 0.95rem;
+      max-width: 30rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn {
+      padding: 0.6rem 1.1rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.7);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-primary {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, #0ea5e9, #22c55e);
+      color: #0b1120;
+      font-weight: 600;
+    }
+
+    .tagline {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      margin-top: 2.5rem;
+      padding: 1.75rem 1.5rem;
+      border-radius: 1.25rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: linear-gradient(145deg, #020617, #020617, #020617);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      margin-bottom: 0.4rem;
+      font-size: 1.25rem;
+    }
+
+    .card-sub {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .timeline {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      border-left: 1px solid rgba(148, 163, 184, 0.5);
+    }
+
+    .timeline li {
+      padding-left: 1.25rem;
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: -5px;
+      top: 0.35rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .timeline-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .timeline-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.25rem;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .pill {
+      border-radius: 999px;
+      padding: 0.2rem 0.7rem;
+      font-size: 0.8rem;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: var(--muted);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .project-card {
+      border-radius: 1rem;
+      padding: 1.1rem 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: radial-gradient(circle at top, rgba(56, 189, 248, 0.12), transparent 55%);
+    }
+
+    .project-title {
+      font-size: 0.95rem;
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
+
+    .project-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+    }
+
+    footer {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--accent);
+    }
+
+    @media (max-width: 720px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 1.75rem 1.5rem;
+      }
+
+      .nav {
+        padding-inline: 1rem;
+      }
+
+      main {
+        padding-inline: 1rem;
+      }
+
+      .nav-links {
+        gap: 0.8rem;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="nav">
+      <div class="nav-logo">YOUR NAME</div>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#work">Work</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section id="about" class="hero">
+      <div>
+        <div class="hero-subtitle">Creative / Developer / Whatever you are</div>
+        <h1 class="hero-title">Hi, I'm Your Name.</h1>
+        <p class="hero-text">
+          Short 2–3 sentence intro about who you are, what you do,
+          and what you’re interested in. Keep it simple but specific.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">View my work</a>
+          <a class="btn" href="#contact">Get in touch →</a>
+        </div>
+      </div>
+      <div>
+        <div class="tagline">Focus</div>
+        <div class="pill-row" style="margin-bottom: 1.25rem;">
+          <span class="pill">Music &amp; Sound</span>
+          <span class="pill">Live Performance</span>
+          <span class="pill">Production</span>
+        </div>
+        <div class="tagline">Tools</div>
+        <div class="pill-row">
+          <span class="pill">Ableton Live</span>
+          <span class="pill">Max/MSP</span>
+          <span class="pill">Reaper</span>
+          <span class="pill">SuperCollider</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Work / Experience -->
+    <section id="work" class="card">
+      <h2>What I Do</h2>
+      <p class="card-sub">
+        A quick overview of the work you do – gigs, collaborations, teaching, coding, etc.
+      </p>
+      <ul class="timeline">
+        <li>
+          <div class="timeline-meta">2023 – present · City / Country</div>
+          <div class="timeline-title">Freelance Musician &amp; Sound Artist</div>
+          <div class="timeline-text">
+            Live improvisation, studio work, and sound design for small projects and performances.
+          </div>
+        </li>
+        <li>
+          <div class="timeline-meta">2021 – 2023 · Event / Group</div>
+          <div class="timeline-title">Performer · Some Ensemble</div>
+          <div class="timeline-text">
+            Regular performances, workshops, or whatever fits your life.
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="card">
+      <h2>Selected Projects</h2>
+      <p class="card-sub">
+        A few things I’m happy about. Add Bandcamp links, YouTube videos, GitHub repos, etc.
+      </p>
+      <div class="projects-grid">
+        <article class="project-card">
+          <div class="project-title">Project Name #1</div>
+          <div class="project-meta">Live set · 2024</div>
+          <p>
+            Short 1–2 sentence description of what this is. Link out if you have audio or video.
+          </p>
+          <a href="#" class="project-link">Listen / watch →</a>
+        </article>
+
+        <article class="project-card">
+          <div class="project-title">Project Name #2</div>
+          <div class="project-meta">Installation · 2023</div>
+          <p>
+            Describe what you did, your role, and what’s interesting about it.
+          </p>
+          <a href="#" class="project-link">More details →</a>
+        </article>
+
+        <article class="project-card">
+          <div class="project-title">Project Name #3</div>
+          <div class="project-meta">Collaboration · 2022</div>
+          <p>
+            Another project. Don’t overthink it – just enough info for someone to be curious.
+          </p>
+          <a href="#" class="project-link">More details →</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="card">
+      <h2>Contact</h2>
+      <p class="card-sub">
+        One clear call to action. How should people reach you?
+      </p>
+      <p>
+        Email: <a href="mailto:youremail@example.com">youremail@example.com</a><br />
+        Instagram: <a href="https://instagram.com/yourhandle" target="_blank">@yourhandle</a><br />
+        GitHub: <a href="https://github.com/yourusername" target="_blank">github.com/yourusername</a>
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    © <span id="year"></span> Your Name. Built with GitHub Pages.
+  </footer>
+
+  <script>
+    // Update year automatically
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
