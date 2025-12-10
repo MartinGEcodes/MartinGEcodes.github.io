@@ -3,49 +3,102 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Martin Gregory-Eaves </title>
-
+  <title>Simple Landing Page</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      margin: 80px;
-    }
-
-    /* Container for the image and title */
-    .header {
       display: flex;
+      height: 100vh;
+    }
+
+    /* Left panel */
+    .left-panel {
+      width: 40%;
+      background: url('your-image.jpg') center/cover no-repeat; /* Replace with your uploaded image path */
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      gap: 20px;
+      padding: 20px;
+      text-align: center;
     }
 
-    .header img {
+    .left-panel img {
       width: 120px;
-      height: auto;
-      border-radius: 8px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid white;
+      margin-bottom: 20px;
     }
 
-    .content {
-      margin-top: 20px;
+    /* Right panel */
+    .right-panel {
+      width: 60%;
+      padding: 40px;
+      background: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top navigation buttons */
+    .nav {
+      display: flex;
+      gap: 20px;
+      justify-content: flex-end;
+      margin-bottom: 40px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #444;
+      padding: 10px 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .nav a:hover {
+      background: #e5e5e5;
+    }
+
+    h1 {
+      margin-top: 0;
+      font-size: 32px;
+      color: #444;
+    }
+
+    p {
       max-width: 600px;
+      line-height: 1.6;
+      color: #666;
     }
   </style>
 </head>
-
 <body>
-
-  <!-- Header Section -->
-  <div class="header">
-    <img src="selfie.jpg" alt="Your Photo">
-    <h1>Martin Gregory-Eaves</h1>
+  <!-- Left side with background + photo -->
+  <div class="left-panel">
+    <img src="your-photo.jpg" alt="Profile Photo" />
+    <h2>Your Name</h2>
+    <p>A simple subtitle or tagline goes here.</p>
   </div>
 
-  <!-- Text Section -->
-  <div class="content">
+  <!-- Right side with navigation + text -->
+  <div class="right-panel">
+    <div class="nav">
+      <a href="#projects">Projects</a>
+      <a href="#cv">CV</a>
+      <a href="#blog">Blog</a>
+      <a href="#coffee">Coffee Corner</a>
+    </div>
+
+    <h1>Welcome to My Page</h1>
     <p>
-      Hi! This is my personal website where I want to show some of my python coding projects I did to get better with the coding language. I also have linked my up to date CV in one of the tabs and 
-      linked some cool youtube videos that helped me understand certain physical concepts. 
+      This is a very simple landing page layout inspired by the design you shared.
+      Replace this text with your own introduction, description, or mission statement.
     </p>
   </div>
-
 </body>
 </html>
