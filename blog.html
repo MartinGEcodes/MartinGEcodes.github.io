@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Martin Gregory-Eaves</title>
+  <style>
+    /* ---------- GLOBAL ---------- */
+    :root {
+      --bg-page: #f2f2f2;
+      --bg-content: #fdfaf5;
+      --header-bg: #333333;
+      --header-text: #f5f5f5;
+      --accent: #1e6bb8;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg-page);
+      color: #222;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- HEADER / NAV ---------- */
+    .site-header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+    }
+
+    .site-title {
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav a {
+      color: var(--header-text);
+      text-decoration: none;
+      padding: 4px 0;
+      position: relative;
+      font-size: 14px;
+    }
+
+    /* simple underline hover */
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: #ffffff;
+      transition: width 0.2s ease;
+    }
+
+    .nav a:hover::after {
+      width: 100%;
+    }
+
+    .nav a.active::after {
+      width: 100%;
+    }
+
+    /* ---------- MAIN CONTENT ---------- */
+    .content-wrapper {
+      max-width: 960px;
+      margin: 32px auto 40px;
+      background: var(--bg-content);
+      padding: 32px 40px 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-sizing: border-box;
+    }
+
+    .intro {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .intro-text {
+      flex: 2;
+    }
+
+    .intro-photo {
+      flex: 1;
+      max-width: 260px;
+      border-radius: 6px;
+      object-fit: cover;
+      filter: grayscale(10%) contrast(1.05); /* slightly “rustic” */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    }
+
+    h1 {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-weight: 700;
+      font-size: 32px;
+      margin: 0 0 16px;
+      color: #222;
+    }
+
+    p {
+      line-height: 1.7;
+      font-size: 15px;
+      margin: 0 0 12px;
+      color: #333;
+    }
+
+    .tagline {
+      font-style: italic;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    /* ---------- FOOTER ---------- */
+    .site-footer {
+      max-width: 960px;
+      margin: 0 auto 24px;
+      padding: 8px 4px;
+      font-size: 12px;
+      color: #777;
+      text-align: left;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 800px) {
+      .content-wrapper {
+        margin: 16px;
+        padding: 24px 20px 28px;
+      }
+      .intro {
+        flex-direction: column;
+      }
+      .intro-photo {
+        max-width: 220px;
+        align-self: center;
+      }
+      .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="site-header">
+    <div class="site-title">Martin Gregory-Eaves</div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="cv.html">CV</a>
+      <a href="blog.html">Blog</a>
+      <a href="Coffee_corner.html">Coffee Corner</a>
+    </nav>
+  </header>
+
+  <!-- MAIN CARD -->
+  <main class="content-wrapper">
+    <article class="intro">
+      <div class="intro-text">
+        <h1>Thoughts and opinions</h1>
+        <p>More to come...</p>
+
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    © 2025 Martin Gregory-Eaves
+  </footer>
+
+</body>
+</html>

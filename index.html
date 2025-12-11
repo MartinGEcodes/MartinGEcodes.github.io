@@ -3,104 +3,430 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Martin's Website</title>
+  <title>Martin Gregory-Eaves</title>
   <style>
+    /* ---------- GLOBAL ---------- */
+    :root {
+      --bg-page: #f2f2f2;
+      --bg-content: #fdfaf5;
+      --header-bg: #333333;
+      --header-text: #f5f5f5;
+      --accent: #1e6bb8;
+    }
+
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg-page);
+      color: #222;
     }
 
-    /* Left panel */
-    .left-panel {
-      width: 40%;
-      background: url('images/Background.jpeg') center/cover no-repeat;
-      color: rgb(255, 255, 255);
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- HEADER / NAV ---------- */
+    .site-header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 12px 24px;
       display: flex;
-      flex-direction: column;
-      justify-content: center;
       align-items: center;
-      padding: 20px;
-      text-align: center;
+      justify-content: space-between;
+      font-size: 15px;
     }
 
-    .left-panel img {
-      width: 260px;
-      height: 260px;
-      border-radius: 30%;
-      object-fit: cover;
-      border: 2px solid white;
-      margin-bottom: 30px;
+    .site-title {
+      font-weight: 600;
+      letter-spacing: 0.03em;
     }
 
-    /* Right panel */
-    .right-panel {
-      width: 60%;
-      padding: 40px;
-      background: #f9f9f9;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Top navigation buttons */
     .nav {
       display: flex;
       gap: 20px;
-      justify-content: flex-end;
-      margin-bottom: 40px;
     }
 
     .nav a {
+      color: var(--header-text);
       text-decoration: none;
-      color: #444;
-      padding: 10px 16px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
+      padding: 4px 0;
+      position: relative;
       font-size: 14px;
     }
 
-    .nav a:hover {
-      background: #e5e5e5;
+    /* simple underline hover */
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: #ffffff;
+      transition: width 0.2s ease;
+    }
+
+    .nav a:hover::after {
+      width: 100%;
+    }
+
+    .nav a.active::after {
+      width: 100%;
+    }
+
+    /* ---------- MAIN CONTENT ---------- */
+    .content-wrapper {
+      max-width: 960px;
+      margin: 32px auto 40px;
+      background: var(--bg-content);
+      padding: 32px 40px 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-sizing: border-box;
+    }
+
+    .intro {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .intro-text {
+      flex: 2;
+    }
+
+    .intro-photo {
+      flex: 1;
+      max-width: 200px;
+      border-radius: 6px;
+      object-fit: cover;
+      filter: grayscale(10%) contrast(1.05); /* slightly “rustic” */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.18);
     }
 
     h1 {
-      margin-top: 0;
+      font-family: "Georgia", "Times New Roman", serif;
+      font-weight: 700;
       font-size: 32px;
-      color: #444;
+      margin: 0 0 16px;
+      color: #222;
     }
 
     p {
-      max-width: 600px;
-      line-height: 1.6;
-      color: #666;
+      line-height: 1.7;
+      font-size: 15px;
+      margin: 0 0 12px;
+      color: #333;
     }
+
+    .tagline {
+      font-style: italic;
+      margin-bottom: 20px;
+      color: #555;
+    }
+
+    /* ---------- FOOTER ---------- */
+    .site-footer {
+      max-width: 960px;
+      margin: 0 auto 24px;
+      padding: 8px 4px;
+      font-size: 12px;
+      color: #777;
+      text-align: left;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 800px) {
+      .content-wrapper {
+        margin: 16px;
+        padding: 24px 20px 28px;
+      }
+      .intro {
+        flex-direction: column;
+      }
+      .intro-photo {
+        max-width: 220px;
+        align-self: center;
+      }
+      .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+    }
+    /* ===== TIMELINE BOX (SECOND BOX UNDER INTRO) ===== */
+
+:root {
+  --timeline-bg: #f9f6ef;   /* ← change this to the color you want */
+}
+
+.timeline-box {
+  max-width: 960px;
+  margin: 0 auto 40px;
+  padding: 32px 40px;
+  background: var(--timeline-bg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.timeline-title {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+/* vertical line */
+.timeline {
+  position: relative;
+  margin-left: 20px;   /* more space */
+  padding-left: 20px;  /* more padding */
+}
+
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: #db0505;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 32px;
+}
+/* move title + date to the right of the marker */
+.timeline-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 10px;
+  margin-left: 10px;      /* <-- key line */
+}
+
+/* move the image + paragraph to line up under the title */
+.timeline-body {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-left: 28px;      /* <-- key line */
+}
+
+
+.timeline-marker {
+  position: absolute;
+  left: -12px;        /* slightly left for more room */
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgb(227, 34, 34);   /* bullet is now black */
+  border: 2px solid black;
+}
+
+
+/* title + date */
+.timeline-header {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.timeline-header h3 {
+  font-family: "Georgia", serif;
+  margin: 0;
+  font-size: 18px;
+}
+
+.timeline-date {
+  font-size: 13px;
+  color: #666;
+}
+
+/* body layout */
+.timeline-body {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.timeline-img-cont {
+  width: 160px;
+  height: 110px;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+.timeline-img-fit {
+  width: 160px;
+  height: 110px;
+  object-fit: fit;
+  border-radius: 4px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.timeline-text {
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 600px;
+  color: #333;
+}
+
+/* responsive */
+@media (max-width: 800px) {
+  .timeline-box {
+    padding: 24px 20px;
+    margin: 16px;
+  }
+  .timeline-body {
+    flex-direction: column;
+  }
+  .timeline-img {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
   </style>
 </head>
 <body>
-  <!-- Left side with background + photo -->
-  <div class="left-panel">
-    <img src="images/LAB_selfie.jpeg" alt="Profile Photo" />
-    <h2>Martin Gregory-Eaves</h2>
-    <p>Final year Bsc of Applied Physics studnet and aspiring robotics engineer</p>
-  </div>
 
-  <!-- Right side with navigation + text -->
-  <div class="right-panel">
-    <div class="nav">
-      <a href="#projects">Projects</a>
-      <a href="#cv">CV</a>
-      <a href="#blog">Blog</a>
-      <a href="#coffee">Coffee Corner</a>
+  <!-- TOP BAR -->
+  <header class="site-header">
+    <div class="site-title">Martin Gregory-Eaves</div>
+    <nav class="nav">
+      <a href="projects.html">Projects</a>
+      <a href="cv.html">CV</a>
+      <a href="blog.html">Blog</a>
+      <a href="Coffee_corner.html">Coffee Corner</a>
+    </nav>
+  </header>
+
+  <!-- MAIN CARD -->
+  <main class="content-wrapper">
+    <article class="intro">
+      <div class="intro-text">
+        <h1>Martin Gregory-Eaves</h1>
+        <p class="tagline">
+          Final-year BSc Applied Physics student and aspiring robotics engineer.
+        </p>
+
+        <p>
+          Welcome to my website. Here you can find my up-to-date CV, engineering and coding
+          projects, and a collection of my favourite books, films, and videos. I use the blog
+          section to write short essays and more developed reflections. As my uncle Dave says,
+          if my brain is my muscle then the blog is my gym.
+        </p>
+
+        <p>
+          I am currently studying Applied Physics at the University of Groningen. Recently I've
+          worked on a Cybathlon hand prosthesis as part of the CybaNorth team and I am
+          researching swarm control of miniature robots for surface crack detection in the
+          DAISY lab. I enjoy building things that sit between hardware, software, and control.
+        </p>
+      </div>
+
+      <img src="images/croppedselfie.png" alt="Martin Gregory-Eaves" class="intro-photo" />
+    </article>
+  </main>
+  <!-- PROFESSIONAL TIMELINE BOX -->
+<section class="timeline-box">
+  <h2 class="timeline-title">Professional Timeline</h2>
+
+  <div class="timeline">
+
+    <!-- ITEM 1 (your earliest event goes first) -->
+    <div class="timeline-item">
+      <div class="timeline-marker"></div>
+      <div class="timeline-header">
+        <h3>BSc Applied Physics, University of Groningen</h3>
+        <span class="timeline-date">Sep 2023 – Present</span>
+      </div>
+      <div class="timeline-body">
+        <img src="images/RUG_logo.png" class="timeline-img-cont">
+        <p class="timeline-text">
+          Enrolled in the BSc Applied Physics programme, taking elective courses in Solid Mechanics,
+          Nano-Physics and Nanotechnology, Mechatronics, Control Engineering, CAD, and more. Designed and
+          produced an electromagnetic motor and presented it at the first-year RUG Physics symposium.
+        </p>
+      </div>
     </div>
 
-    <h1>Martin Gregory-Eaves</h1>
-    <p>
-      Welcome to my website!!! While navigating around you can find my up-to-date CV, engineering and coding
-      projects, and all my favorite movies, books, and youtube videos. I use the "Blog"
-      section to write short essays and more thought out statements. As my uncle Dave says
-      if my brain is my muscle then the "Blog" section is my gym.
-    </p>
+    <!-- ITEM 2 -->
+    <div class="timeline-item">
+      <div class="timeline-marker"></div>
+      <div class="timeline-header">
+        <h3>Engineering Team Member, CybaNorth</h3>
+        <span class="timeline-date">Feb 2023 – Nov 2024</span>
+      </div>
+      <div class="timeline-body">
+        <img src="images/CybaNorth.jpeg" class="timeline-img-fit">
+        <p class="timeline-text">
+          Developed prosthetic hand mechanisms for the Cybathlon competition at ETH Zürich,
+          working on control electronics and actuation design.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-marker"></div>
+      <div class="timeline-header">
+        <h3>R&D Lab Intern @ Barberan Solutions</h3>
+        <span class="timeline-date">Jun 2024 – Jul 2024</span>
+      </div>
+      <div class="timeline-body">
+        <img src="images/barberan.jpeg" class="timeline-img-fit">
+        <p class="timeline-text">
+          Gained first-hand experience with industrial machinery and heavy production equipment while constructing industrial printing machines. Observed the generation of electric wave pulses for piezoelectric nozzle actuation.
+        </p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-marker"></div>
+      <div class="timeline-header">
+        <h3>DAISY-Lab Bachelor Research Student</h3>
+        <span class="timeline-date">Feb 2023 – Nov 2024</span>
+      </div>
+      <div class="timeline-body">
+        <img src="images/DAISY_logo.png" class="timeline-img-cont">
+        <p class="timeline-text">
+          Conducted metal sheet modal analysis in DDS Abaqus for robot inspection simulations in Webots.
+          
+        </p>
+      </div>
+    </div>
+
+    <!-- ITEM 3 -->
+    <div class="timeline-item">
+      <div class="timeline-marker"></div>
+      <div class="timeline-header">
+        <h3>Mechatronics Engineering Intern @ Aspectbiosystems</h3>
+        <span class="timeline-date">Jun 2025 – Aug 2025</span>
+      </div>
+      <div class="timeline-body">
+        <img src="images/aspect_group.jpeg" class="timeline-img-fit">
+        <p class="timeline-text">
+          Redesigned and tested an alignment tool used for bonding layers of a PDMS bioprinting nozzle. Worked as part of a rapid research and design engineering team with extensive exposure to various types of 3D printers and other prototyping tools.
+        </p>
+      </div>
+    </div>
+
   </div>
+</section>
+
+
+  <footer class="site-footer">
+    © 2025 Martin Gregory-Eaves
+  </footer>
+
 </body>
 </html>
