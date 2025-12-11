@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Martin Gregory-Eaves – CV</title>
+  <style>
+    /* ---------- GLOBAL (same as landing page) ---------- */
+    :root {
+      --bg-page: #f2f2f2;
+      --bg-content: #fdfaf5;
+      --header-bg: #333333;
+      --header-text: #f5f5f5;
+      --accent: #1e6bb8;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg-page);
+      color: #222;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- HEADER / NAV (same as landing page) ---------- */
+    .site-header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+    }
+
+    .site-title {
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .nav {
+      display: flex;
+      gap: 20px;
+    }
+
+    .nav a {
+      color: var(--header-text);
+      text-decoration: none;
+      padding: 4px 0;
+      position: relative;
+      font-size: 14px;
+    }
+
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: #ffffff;
+      transition: width 0.2s ease;
+    }
+
+    .nav a:hover::after {
+      width: 100%;
+    }
+
+    .nav a.active::after {
+      width: 100%;
+    }
+
+    /* ---------- MAIN CONTENT WRAPPER ---------- */
+    .content-wrapper {
+      max-width: 960px;
+      margin: 32px auto 32px;
+      background: var(--bg-content);
+      padding: 32px 40px 36px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-sizing: border-box;
+    }
+
+    /* ---------- CV STYLING ---------- */
+    h1 {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-weight: 700;
+      font-size: 30px;
+      margin: 0 0 6px;
+      color: #222;
+    }
+
+    h2 {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 20px;
+      margin: 24px 0 8px;
+      color: #222;
+    }
+
+    p {
+      line-height: 1.7;
+      font-size: 15px;
+      margin: 0 0 10px;
+      color: #333;
+    }
+
+    ul {
+      margin: 0 0 10px 20px;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 4px;
+      line-height: 1.6;
+    }
+
+    .cv-contact {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 18px;
+    }
+
+    /* ---------- FOOTER (optional, matches landing) ---------- */
+    .site-footer {
+      max-width: 960px;
+      margin: 0 auto 24px;
+      padding: 8px 4px;
+      font-size: 12px;
+      color: #777;
+      text-align: left;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 800px) {
+      .content-wrapper {
+        margin: 16px;
+        padding: 24px 20px 28px;
+      }
+      .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="site-header">
+    <div class="site-title">Martin Gregory-Eaves</div>
+    <nav class="nav">
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="cv.html" class="active">CV</a>
+      <a href="blog.html">Blog</a>
+      <a href="Coffee_corner.html">Coffee Corner</a>
+    </nav>
+  </header>
+
+  <!-- CV CARD -->
+  <main id="cv" class="content-wrapper">
+    <h1>Martin Gregory-Eaves</h1>
+    <p class="cv-contact">
+      (+48) 500 484 111 | m.c.gregory-eaves@student.rug.nl | 18/02/05
+    </p>
+
+    <h2>Summary</h2>
+    <p>I am a final year Applied Physics student at the University of Groningen. Alongside my bachelor’s degree, I was
+        part of the CybaNorth team which designed and manufactured a hand prosthesis for the Cybathlon competition
+        at ETH Zurich. Currently, I am a research assistant in the Distributed Autonomous Intelligent Systems
+        (DAISY) lab working under Dr. Bahar Haghighat and looking into the control of swarms of miniature robots
+        used for surface crack detection. I am a big fan of the outdoors and love playing all sorts fo sports. I speak
+        English, Polish, and Spanish and can program in Python and have a good basic knowledge of C/C++.</p>
+
+    <h2>Relevant Experience</h2>
+    <p><strong>Mechatronics Engineer Intern</strong> — Aspect Biosystems, Vancouver, BC, Canada (July–August 2025)</p>
+    <ul>
+        <li>Created SolidWorks CAD prototypes and engineering drawings with DG&T (Geometric Dimentioning &Tolerancing.)</li>
+        <li>SolidWorks PDM (Product Data Management) & R&D lab + clean room exposure.</li>
+        <li>Recreated experiments seen in modern literature aimed to improve product quality.</li>
+    </ul>
+
+    <p><strong>Research and Design Lab Assistant Intern</strong> — Barberan, Barcelona, Spain (June–July 2024)</p>
+    <ul>
+        <li>Assisted with developing wave functions for a piezoelectric nozzle actuator.</li>
+        <li>Took part in the manufacturing of industrial printers.</li>
+        <li>Produced documentation with nozzle head analysis.</li>
+    </ul>
+
+    <p><strong>Engineering Team Member</strong> — Cybanorth, Groningen (Feb 2023 – Nov 2024)</p>
+    <ul>
+        <li>Edited the Arduino IDE code that improved hand contraction and allowed for individual finger actuation.</li>
+        <li>R&D for the finger actuating mechanism.</li>
+        <li>Soldered and wired electrical components for the mechanical hand prosthesis.</li>
+        <li>Funded trip to ETH Zurich.</li>
+    </ul>
+
+    <p><strong>Research Assistant</strong> — DAISY Lab, Groningen (Nov 2024 – Present)</p>
+    <ul>
+        <li>Created and analyzed vibrating models in DDS Abaqus using different Python scripting techniques.</li>
+        <li>Helped with swarm robot detection architecture.</li>
+    </ul>
+
+    <h2>Education</h2>
+    <p>BSc Applied Physics — University of Groningen (2023–Present)</p>
+    <p>IBDP + IGCSE — British School of Barcelona (2019–2023)</p>
+
+    <h2>Projects</h2>
+    <p>Electromagnetic Generator — Latex, Fusion 360, Python (May–June 2024)</p>
+    <ul>
+        <li>Part of a 4-student team that designed and manufactured an electromagnetic generator using 3D printed parts and metal wire.</li>
+        <li>Created Python plots of results in Python.</li>
+        <li>Applied the principles of electromagnetic induction to a physical model.</li>
+        <li>Presented at the RUG Symposium.</li>
+    </ul>
+
+    <h2>Technical Skills</h2>
+    <p><strong>Languages/Services:</strong> SolidWorks, Inventor, Python, C/C++, Arduino IDE, Latex, PowerPoint, Word, Excel, Fusion 360.</p>
+    <p><strong>Developer Tools:</strong> Google Colab, Visual Studio Code, Overleaf, Wolfram Mathematica.</p>
+    <p><strong>Libraries:</strong> NumPy, Matplotlib.</p>
+  </main>
+
+  <!-- EXTRA NOTES AS SECOND CARD -->
+  <section id="extra" class="content-wrapper">
+    <h2>Additional Notes</h2>
+
+    <p>
+      A link to Barberan Solutions:
+      <a href="https://barberan.com" target="_blank">https://barberan.com</a>
+    </p>
+
+    <p>
+      A link to Aspect Biosystems:
+      <a href="https://www.aspectbiosystems.com" target="_blank">
+        https://www.aspectbiosystems.com
+      </a>
+    </p>
+
+    <p>
+        A link to the Distributed Autonomous Intelligent Systems (DAISY) Lab's (University of Groningen) YouTube channel can be found here:
+        <a href="https://www.youtube.com/@DAISY-LAB" target="_blank">https://www.youtube.com/@DAISY-LAB</a>
+    </p>
+
+    <p>
+      Please contact me if you are looking for a statement from one of my professional or academic referees.
+      gregoryeavesmartin@gmail.com
+    </p>
+  </section>
+
+  <footer class="site-footer">
+    © 2025 Martin Gregory-Eaves
+  </footer>
+
+</body>
+</html>
