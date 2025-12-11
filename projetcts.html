@@ -3,62 +3,164 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Projects – Martin Gregory-Eaves</title>
+  <title>Coffee Corner – Martin Gregory-Eaves</title>
 
   <style>
-    body { margin: 0; font-family: Arial, sans-serif; display: flex; height: 100vh; }
-
-    .left-panel {
-      width: 40%;
-      background: url('images/Background.jpeg') center/cover no-repeat;
-      color: white;
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      padding: 20px; text-align: center;
+    /* ---------- GLOBAL (same as landing + CV) ---------- */
+    :root {
+      --bg-page: #f2f2f2;
+      --bg-content: #fdfaf5;
+      --header-bg: #333333;
+      --header-text: #f5f5f5;
+      --accent: #1e6bb8;
     }
 
-    .left-panel img {
-      width: 260px; height: 260px; border-radius: 30%;
-      object-fit: cover; border: 2px solid white; margin-bottom: 30px;
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg-page);
+      color: #222;
     }
 
-    .right-panel {
-      width: 60%; padding: 40px; background: #f9f9f9; display: flex; flex-direction: column;
+    a {
+      color: var(--accent);
+      text-decoration: none;
     }
 
-    .nav { display: flex; gap: 20px; justify-content: flex-end; margin-bottom: 40px; }
+    a:hover {
+      text-decoration: underline;
+    }
+
+    /* ---------- HEADER / NAV ---------- */
+    .site-header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+    }
+
+    .site-title {
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    .nav {
+      display: flex;
+      gap: 20px;
+    }
+
     .nav a {
-      text-decoration: none; color: #444; padding: 10px 16px;
-      border: 1px solid #ccc; border-radius: 6px; font-size: 14px;
+      color: var(--header-text);
+      text-decoration: none;
+      padding: 4px 0;
+      position: relative;
+      font-size: 14px;
     }
-    .nav a:hover { background: #e5e5e5; }
-    h1 { margin-top: 0; font-size: 32px; color: #444; }
-    p { max-width: 650px; line-height: 1.6; color: #666; }
+
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: #ffffff;
+      transition: width 0.2s ease;
+    }
+
+    .nav a:hover::after,
+    .nav a.active::after {
+      width: 100%;
+    }
+
+    /* ---------- CONTENT CARD ---------- */
+    .content-wrapper {
+      max-width: 960px;
+      margin: 32px auto;
+      background: var(--bg-content);
+      padding: 32px 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
+
+    h2 {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 22px;
+      margin-top: 28px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: #333;
+    }
+
+    ul {
+      margin-left: 20px;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    .site-footer {
+      max-width: 960px;
+      margin: 0 auto 24px;
+      font-size: 12px;
+      color: #777;
+      padding-left: 4px;
+    }
+
+    @media (max-width: 800px) {
+      .content-wrapper {
+        margin: 16px;
+        padding: 24px 20px;
+      }
+      .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <div class="left-panel">
-    <img src="images/LAB_selfie.jpeg" alt="Profile Photo" />
-    <h2>Martin Gregory-Eaves</h2>
-    <p>Final year BSc Applied Physics student and aspiring robotics engineer</p>
-  </div>
 
-  <div class="right-panel">
-    <div class="nav">
+  <!-- TOP NAVBAR -->
+  <header class="site-header">
+    <div class="site-title">Martin Gregory-Eaves</div>
+
+    <nav class="nav">
       <a href="index.html">Home</a>
-      <a href="projects.html">Projects</a>
       <a href="cv.html">CV</a>
       <a href="blog.html">Blog</a>
-      <a href="coffee.html">Coffee Corner</a>
-    </div>
+      <a href="Coffee_corner.html" class="active">Coffee Corner</a>
+    </nav>
+  </header>
 
+  <!-- CONTENT CARD -->
+  <main class="content-wrapper">
     <h1>Projects</h1>
-    <p>
-      Welcome to my engineering and coding project portfolio.  
-      Here you’ll eventually find robotics builds, physics simulations, embedded-system work, 
-      and experimental software projects.  
-      This page will be updated as I document and upload my work.
+    <p class="tagline">
+      Coming soon...
     </p>
-  </div>
+
+    
+
+  <footer class="site-footer">© 2025 Martin Gregory-Eaves</footer>
+
 </body>
 </html>
