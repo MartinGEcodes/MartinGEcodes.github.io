@@ -149,13 +149,16 @@
         flex-direction: column;
       }
       
-      .intro-photo {
-        width: 100%;
-        max-width: 260px;
+     
+      .intro-photo{
+        width: clamp(160px, 35vw, 220px);
+        aspect-ratio: 4 / 5;
         height: auto;
+        object-fit: cover;
+        flex: 0 0 auto;
         display: block;
-        margin: 0 auto 20px;
       }
+
       .site-header {
         flex-direction: column;
         align-items: flex-start;
