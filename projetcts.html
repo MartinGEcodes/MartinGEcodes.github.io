@@ -134,11 +134,146 @@
         gap: 6px;
       }
     }
+/* ---------- PROJECTS ---------- */
+.tagline { margin-top: 6px; color: #555; }
+
+.projects-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.projects-filter{
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.filter-btn{
+  border: 0;
+  background: transparent;
+  padding: 9px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.filter-btn.is-active{
+  background: #fff;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+}
+
+.projects-grid{
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.project-card{
+  background: #fff;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.project-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.12);
+}
+
+.card-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.project-card h3{
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.25;
+  color: #222;
+}
+
+.card-desc{
+  margin: 10px 0 0;
+  color: #444;
+}
+
+.badge{
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.badge-phys{ background: rgba(30,107,184,.14); }
+.badge-quant{ background: rgba(0,160,110,.16); }
+
+.chips{
+  margin-top: 10px;
+  display:flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip{
+  font-size: 12px;
+  padding: 6px 10px;
+  background: rgba(0,0,0,0.06);
+  border-radius: 999px;
+}
+
+.metrics{
+  margin: 12px 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+}
+
+.metrics dt{
+  font-size: 11px;
+  color: rgba(0,0,0,0.55);
+  margin-bottom: 2px;
+}
+
+.metrics dd{
+  margin: 0;
+  font-weight: 800;
+}
+
+.card-links{
+  margin-top: 12px;
+  display:flex;
+  gap: 14px;
+}
+
+.link{
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+
+.link:hover{ border-bottom-color: rgba(0,0,0,0.65); }
+
+@media (max-width: 800px){
+  .projects-grid{ grid-template-columns: 1fr; }
+}
+
   </style>
 </head>
 
-<body>
 
+
+<body>
+  
   <!-- TOP NAVBAR -->
   <header class="site-header">
     <div class="site-title">Martin Gregory-Eaves</div>
@@ -147,20 +282,77 @@
       <a href="index.html">Home</a>
       <a href="cv.html">CV</a>
       <a href="blog.html">Blog</a>
-      <a href="Coffee_corner.html" class="active">Coffee Corner</a>
+      <a href="Coffee_corner.html" >Coffee Corner</a>
     </nav>
   </header>
 
   <!-- CONTENT CARD -->
   <main class="content-wrapper">
+
     <h1>Projects</h1>
     <p class="tagline">
-      Coming soon...
+      Besides this website, below you can find a few things I have worked on in the past.
+      This space is meant to neatly organise all my personal projects I have started in order
+      to either learn more about a given topic. 
+      <div class="projects-filter" role="tablist" aria-label="Project category">
+      <button class="filter-btn is-active" data-filter="all" type="button">All</button>
+      <button class="filter-btn" data-filter="Engineering Physics" type="button">Engineering Physics</button>
+      <button class="filter-btn" data-filter="Finance" type="button">Finance</button>
+    </div>
+  </header>
+
+  <section class="projects-grid" aria-label="Project list">
+
+    <!-- Physics -->
+    <article class="project-card" data-category="Engineering Physics">
+      <div class="card-top">
+        <a href="dos.html"><h3>Density of States (DOS) visualisation</h3></a>
+        <span class="badge badge-quant">Engineering Physics</span>
+      </div>
+      <p class="card-desc">An intuitive and interactive exploration of how dimensionality affects
+        the density of states of an ideal Fermi gas.
+      </p>
+      <div class="chips">
+        <span class="chip">Python</span><span class="chip">Pandas</span>
+
+      <div class="card-links">
+        <a href="#" class="link">Write-up</a>
+        <a href="#" class="link">GitHub</a>
+      </div>
+    </article>
+
+    <!-- Finance -->
+    <article class="project-card" data-category="Finance">
+      <div class="card-top">
+        <h3>Financial Modeling Projects</h3>
+        <span class="badge badge-phys">Finance</span>
+      </div>
+      <p class="card-desc">I have watched The Big Short and now want to understand what a stock option is...</p>
+      
+    </article>
     </p>
+  </main>
+<footer class="site-footer">© 2025 Martin Gregory-Eaves</footer>
 
-    
+<!-- JS filtering code -->
+<script>
+  const buttons = document.querySelectorAll(".filter-btn");
+  const cards = document.querySelectorAll(".project-card");
 
-  <footer class="site-footer">© 2025 Martin Gregory-Eaves</footer>
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      buttons.forEach(b => b.classList.remove("is-active"));
+      btn.classList.add("is-active");
+
+      const f = btn.dataset.filter;
+      cards.forEach(card => {
+        const cat = card.dataset.category;
+        card.style.display = (f === "all" || f === cat) ? "" : "none";
+      });
+    });
+  });
+</script>
+
 
 </body>
 </html>
