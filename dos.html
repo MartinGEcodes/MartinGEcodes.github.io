@@ -129,6 +129,13 @@
     .links a:hover{
       border-bottom-color: var(--accent);
     }
+    .img-fit {
+  display: block;
+  margin: 0 auto 1rem auto; /* centers image + spacing below */
+  max-width: 100%;
+  height: auto;
+}
+
 
     /* ---------- RESPONSIVE ---------- */
     @media (max-width: 820px){
@@ -168,19 +175,41 @@
 
       <h2>Overview</h2>
       <p>
-        This project investigates how the density of states (DOS) depends on
-        dimensionality by combining analytical derivations with numerical
-        visualisation. The goal is to build intuition around phase space
-        arguments rather than treating the DOS as a memorised formula.
+        This project investigates how the density of states (DOS) depends on the
+        dimensionality of an ideal Fermi gas. My goal here is to build intuition around phase space
+        arguments rather than treating the DOS as a memorised formula. The description below is the way 
+        I tried explaining the concept of DOS to myself when revising for Solid State Physics. 
       </p>
-
+      <P>
+        We start with the <a href = "https://cdn.savemyexams.com/pdfs/iIOSjtNqXRPP~ayd.pdf"> "Free Electron Model"</a>
+        of a solid from high school chemistry, which 
+        introduces the idea that in a bulk material electrons are "free" to move around. Metallic materials 
+        are described as having a "sea of delocalized electrons", filled by electrons from the outermost 
+        shell, where electrons are free to move around within the bounds of the material. 
+        This surprisingly simple model is very appreciated in solid state physics and can be used
+        to describe 
+        <a href="https://www.britannica.com/science/alkali-metal"> alkali metals</a>, <a href="https://www.britannica.com/science/noble-metal">noble metals</a>,
+        and many more. 
+      </P>
+      <p>
+        The question then becomes "what states do these electrons occupy?", and this is answered through
+        solving the Schrödinger equation with periodic baundry conditions, which leads to plane wave solutions. The density of states function 
+        tells us how many distinct quantum states exist per energy slice. <a href="https://www.youtube.com/watch?v=tFSZUHRQa3k">This video</a>
+        gives a very good and concise explanation of what and how the density of states is derived. 
+      </p>
      
 
       <h2>Implementation</h2>
       <p>
         The visualisation is implemented in Python using NumPy and Matplotlib.
-        Sliders allow interactive comparison across 1D, 2D, and 3D cases.
+        Sliders allow interactive comparison across 1D, 2D, and 3D cases. The image below shows what the DOS
+        for each dimension. The full derivation of this graph can be found on <a href="https://physics.stackexchange.com/questions/528517/periodicity-of-density-of-states-with-decreasing-dimension">this</a>
+        website.
       </p>
+       <div class="timeline-body">
+        <img src="images/DOS_graph.jpeg" class="img-fit">
+
+      </div>
 
   
 
