@@ -31,6 +31,54 @@
       text-decoration: underline;
     }
 
+    /* ---------- BOOK LIST ---------- */
+.book-list {
+  margin-top: 24px;
+}
+
+.book-item {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 20px;
+  margin-bottom: 28px;
+  align-items: start;
+}
+
+.book-cover img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.book-details h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.book-author {
+  font-size: 14px;
+  color: #666;
+  margin: 4px 0 10px 0;
+  font-style: italic;
+}
+
+.book-description {
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ---------- MOBILE ---------- */
+@media (max-width: 600px) {
+  .book-item {
+    grid-template-columns: 1fr;
+  }
+
+  .book-cover img {
+    max-width: 160px;
+  }
+}
     /* ---------- HEADER / NAV ---------- */
     .site-header {
       background: var(--header-bg);
@@ -135,6 +183,7 @@
       }
     }
   </style>
+  
 </head>
 
 <body>
@@ -158,6 +207,64 @@
     <p class="tagline">
       Book and youtube video recommendations, no movies as there would be too many!
     </p>
+    <h2>Books</h2>
+
+<div class="book-list">
+
+  <div class="book-item">
+    <div class="book-cover">
+      <img src="images/tmrtmrtmr.jpg" alt="Book cover">
+    </div>
+
+    <div class="book-details">
+      <h3>Tomorrow Tomorrow and Tomorrow</h3>
+      <div class="book-author">Gabrielle Zevin</div>
+
+      <p class="book-description">
+        A very fast read and an extreamly enjoyable one to that. While the main story revolves around three friends starting a video game company and 
+        the life stories that come with such a undertaking, the strong themes of hard work and freindship make the book special. Zevin's writing 
+        made me feel inspired to work hard and stay consistent while asking questions about personal dependance and the importance of great friendships. 
+        I would highly recomend. 
+
+      </p>
+    </div>
+  </div>
+  <div class="book-item">
+  <div class="book-cover">
+    <img src="images/7br.jpg" alt="Book cover">
+  </div>
+
+  <div class="book-details">
+    <h3>7 Brief Lessons on Physics</h3>
+    <div class="book-author">Carlo Rovelli</div>
+
+    <p class="book-description">
+      A fairly short read with concise explanations of several key concepts in physics, such as heat, 
+      entropy, quantum mechanics, and the architecture of space. In the concluding chapter, Rovelli briefly mentions the order of time and the
+       importance of the concept of heat, which I found very philosophical and intriguing. I highly recommend this to anyone, and especially to 
+       those who want to make conversation with a fellow physicist.
+    </p>
+  </div>
+</div>
+
+<div class="book-item">
+  <div class="book-cover">
+    <img src="images/tlaf.jpeg" alt="Book cover">
+  </div>
+  <div class="book-details">
+    <h3>Think Like a Freak</h3>
+    <div class="book-author">Steven D. Levitt & Stephen J. Dubner</div>
+
+    <p class="book-description">
+      A very entertaining read with plenty of neat short stories that hilight the importance of understanding undeclared human incentives. 
+      I haven't read any other of their books (I think "Freakonomics" is the most famous one) yet still enjoyed this one on its own. Very entertaining
+      with plenty of "huh that's prety neat" moments. 
+    </p>
+  </div>
+</div>
+
+</div>
+
 
     
 
