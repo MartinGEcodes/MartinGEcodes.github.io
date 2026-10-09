@@ -12,6 +12,13 @@
       --muted: #6b7280;
       --accent: #2563eb;
       --border: #e5e7eb;
+      --surface: #f9fafb;
+
+      /* DOS graph colours (6-digit hex – the script adds transparency) */
+      --dos-0: #db2777;   /* 0D quantum dot  */
+      --dos-1: #d97706;   /* 1D quantum wire */
+      --dos-2: #059669;   /* 2D quantum well */
+      --dos-3: #2563eb;   /* 3D bulk         */
     }
 
     *{ box-sizing: border-box; }
@@ -63,6 +70,7 @@
     /* ---------- CONTENT ---------- */
     .content{
       max-width: 720px;
+      min-width: 0;
     }
 
     h1{
@@ -129,13 +137,205 @@
     .links a:hover{
       border-bottom-color: var(--accent);
     }
-    .img-fit {
-  display: block;
-  margin: 0 auto 1rem auto; /* centers image + spacing below */
-  max-width: 100%;
-  height: auto;
-}
 
+    .img-fit {
+      display: block;
+      margin: 0 auto 1rem auto; /* centers image + spacing below */
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* ---------- INTERACTIVE DOS GRAPH ---------- */
+    .dos-widget{
+      margin: 20px 0 8px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+
+    .dos-toolbar{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .dos-chips{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip{
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .chip input{
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .chip span{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      transition: border-color .15s ease, color .15s ease;
+    }
+
+    .chip span::before{
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--c);
+      opacity: .3;
+      transition: opacity .15s ease;
+    }
+
+    .chip input:checked + span{
+      border-color: var(--c);
+      color: var(--text);
+    }
+
+    .chip input:checked + span::before{ opacity: 1; }
+
+    .chip input:focus-visible + span{
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .seg{
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .seg button{
+      border: 0;
+      background: transparent;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      transition: background .15s ease, color .15s ease;
+    }
+
+    .seg button[aria-pressed="true"]{
+      background: var(--text);
+      color: #fff;
+    }
+
+    .dos-canvas-wrap{
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    #dos-canvas{
+      display: block;
+      touch-action: pan-y;   /* vertical page scroll still works on phones */
+      cursor: crosshair;
+    }
+
+    .dos-readout{
+      min-height: 1.7em;
+      margin: 8px 2px 4px;
+      font-size: 13px;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dos-controls{
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px 20px;
+      margin-top: 6px;
+    }
+
+    .dos-controls label{
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .dos-controls .lbl{
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .dos-controls output{
+      font-weight: 500;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .dos-controls input[type="range"]{
+      width: 100%;
+      margin: 0;
+      accent-color: var(--accent);
+    }
+
+    .dos-fill{
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .dos-fill-title{
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .dos-fill-list{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 18px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .dos-fill-item{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .dos-fill-item i{
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dos-caption{
+      margin: 12px 2px 0;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
 
     /* ---------- RESPONSIVE ---------- */
     @media (max-width: 820px){
@@ -147,6 +347,11 @@
       .back{
         position: static;
       }
+    }
+
+    @media (max-width: 600px){
+      .dos-widget{ padding: 12px; }
+      .dos-controls{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -175,48 +380,112 @@
 
       <h2>Overview</h2>
       <p>
-        This project is still a work in progress and the interactive graph will appear in due course.
-      </p>
-      <p>
         This project investigates how the density of states (DOS) depends on the
         dimensionality of an ideal Fermi gas. The short demo is going to explore
-        in what sense "free" electrons are really free to 
+        in what sense "free" electrons are really free to
         move around in a metal. My goal here is to build intuition around phase space
-        arguments rather than treating the DOS as a memorised formula. The description below is the way 
-        I tried explaining the concept of DOS to myself when revising for Solid State Physics. 
+        arguments rather than treating the DOS as a memorised formula. The description below is the way
+        I tried explaining the concept of DOS to myself when revising for Solid State Physics.
       </p>
-      <P>
-        We start with the <a href = "https://cdn.savemyexams.com/pdfs/iIOSjtNqXRPP~ayd.pdf"> "Free Electron Model"</a>
-        of a solid from high school chemistry, which 
-        introduces the idea that in a bulk material electrons are "free" to move around. 
-        The model continues with the concept of electrons in metallic materials 
+      <p>
+        We start with the <a href="https://cdn.savemyexams.com/pdfs/iIOSjtNqXRPP~ayd.pdf">"Free Electron Model"</a>
+        of a solid from high school chemistry, which
+        introduces the idea that in a bulk material electrons are "free" to move around.
+        The model continues with the concept of electrons in metallic materials
         being described to be in a "sea of delocalized electrons", free to move around within the bounds of the bulk material.
-        TThis sea is formed by electrons in energy bands that lie near the Fermi level, which are typically derived from valence
-        electrons but are best understood using band theory rather than atomic shells. In AP, or IB chemistry classes these are the "electrons from the 
+        This sea is formed by electrons in energy bands that lie near the Fermi level, which are typically derived from valence
+        electrons but are best understood using band theory rather than atomic shells. In AP, or IB chemistry classes these are the "electrons from the
         outermost shell".
         This surprisingly simple model is very appreciated in solid state physics and can be used
-        to describe 
-        <a href="https://www.britannica.com/science/alkali-metal"> alkali metals</a>, 
+        to describe
+        <a href="https://www.britannica.com/science/alkali-metal">alkali metals</a>,
         <a href="https://www.britannica.com/science/noble-metal">noble metals</a>,
-        and many more. 
-      </P>
+        and many more.
+      </p>
       <p>
-        Quantum physics tells us that these electrons are not comepltley free but have a probability distribution of where they would be found
+        Quantum physics tells us that these electrons are not completely free but have a probability distribution of where they would be found
         inside of the metal,
-        this distribution is known as the square magnitude of the wave function and can be found through solving the Scrödinger equation and normalizing the result.
-         Instead of describing the electrons
+        this distribution is known as the square magnitude of the wave function and can be found through solving the Schrödinger equation and normalizing the result.
+        Instead of describing the electrons
         exact position and velocity, which are concepts that break down at a quantum level, we assign electrons quantum states. A quantum
-         state describes all there is to be known 
-        about a system. Mathematically, this quantum state is represented by a wavefunciton, which is a exponential function for free particles and 
-        the model for this project. The wave  
-
+        state describes all there is to be known
+        about a system. Mathematically, this quantum state is represented by a wavefunction, which is an exponential function for free particles and
+        the model for this project. The wave
 
         The question then becomes "what states do these electrons occupy?", and this is answered through
-        solving the Schrödinger equation with periodic baundry conditions, which leads to plane wave solutions. The density of states function 
+        solving the Schrödinger equation with periodic boundary conditions, which leads to plane wave solutions. The density of states function
         tells us how many distinct quantum states exist per slice of energy. <a href="https://www.youtube.com/watch?v=tFSZUHRQa3k">This video</a>
-        gives a very good and concise explanation of what and how the density of states is derived. 
+        gives a very good and concise explanation of what and how the density of states is derived.
       </p>
-     
+
+      <h2>Interactive Graph</h2>
+      <p>
+        The graph below shows what happens to the density of states as electrons lose their freedom to move.
+        Each confined direction is modelled as an infinite square well of width <em>L</em>, which splits the
+        energy into discrete sub-bands, while the remaining directions still behave like a free electron gas.
+      </p>
+      <ul>
+        <li><strong>3D (bulk):</strong> free in every direction, so g(E) ∝ √E.</li>
+        <li><strong>2D (quantum well):</strong> confined in one direction. Each sub-band adds a constant DOS, giving a staircase.</li>
+        <li><strong>1D (quantum wire):</strong> confined in two directions. Each sub-band adds a 1/√(E − E<sub>nm</sub>) spike.</li>
+        <li><strong>0D (quantum dot):</strong> confined in all three. Only discrete levels remain, so the DOS is a set of delta peaks.</li>
+      </ul>
+      <p>
+        Try increasing <em>L</em>: the levels crowd together and every curve approaches the bulk √E result, which is why
+        a large piece of metal behaves like the 3D free electron gas. Moving E<sub>F</sub> fills all states up to that energy,
+        and the totals underneath show that for large <em>L</em> the same Fermi energy holds the same number of electrons
+        in every dimension.
+      </p>
+
+      <section class="dos-widget" aria-label="Interactive density of states graph">
+        <div class="dos-toolbar">
+          <div class="dos-chips" role="group" aria-label="Dimensions to show">
+            <label class="chip" style="--c: var(--dos-0)"><input type="checkbox" value="0" checked><span>0D dot</span></label>
+            <label class="chip" style="--c: var(--dos-1)"><input type="checkbox" value="1" checked><span>1D wire</span></label>
+            <label class="chip" style="--c: var(--dos-2)"><input type="checkbox" value="2" checked><span>2D well</span></label>
+            <label class="chip" style="--c: var(--dos-3)"><input type="checkbox" value="3" checked><span>3D bulk</span></label>
+          </div>
+          <div class="seg" role="group" aria-label="Layout">
+            <button type="button" data-view="overlay" aria-pressed="true">Overlay</button>
+            <button type="button" data-view="grid" aria-pressed="false">Side by side</button>
+          </div>
+        </div>
+
+        <div class="dos-canvas-wrap">
+          <canvas id="dos-canvas" role="img"
+                  aria-label="Density of states versus energy for 0D, 1D, 2D and 3D electron gases"></canvas>
+        </div>
+
+        <div class="dos-readout" id="dos-readout" aria-live="polite"></div>
+
+        <div class="dos-controls">
+          <label>
+            <span class="lbl"><span>Confinement size <em>L</em></span> <output id="dos-L-out"></output></span>
+            <input type="range" id="dos-L" min="1" max="6" step="0.05" value="1.5">
+          </label>
+          <label>
+            <span class="lbl"><span>Fermi energy E<sub>F</sub></span> <output id="dos-EF-out"></output></span>
+            <input type="range" id="dos-EF" min="0" max="12" step="0.05" value="6">
+          </label>
+          <label>
+            <span class="lbl"><span>0D level broadening</span> <output id="dos-sigma-out"></output></span>
+            <input type="range" id="dos-sigma" min="0.02" max="0.5" step="0.01" value="0.08">
+          </label>
+        </div>
+
+        <div class="dos-fill">
+          <div class="dos-fill-title">States filled below E<sub>F</sub> (per volume, in units of g₀E₀)</div>
+          <div class="dos-fill-list" id="dos-fill"></div>
+        </div>
+
+        <p class="dos-caption">
+          Energies are in units of E₀ = ħ²π²/(2mL₀²) and the DOS per unit volume in units of
+          g₀ = m/(πħ²L₀), spin included. Each sub-band starts at n²E₁, with E₁ = E₀(L₀/L)².
+          Peaks taller than the axis are cut off: the 1D peaks are true singularities and the 0D peaks
+          are delta functions, broadened here so they can be seen. The dashed grey line in the side-by-side
+          view is the bulk √E curve for reference.
+        </p>
+      </section>
 
       <h2>Implementation</h2>
       <p>
@@ -225,17 +494,424 @@
         for each dimension. The full derivation of this graph can be found on <a href="https://physics.stackexchange.com/questions/528517/periodicity-of-density-of-states-with-decreasing-dimension">this</a>
         website.
       </p>
-       <div class="timeline-body">
-        <img src="images/DOS_graph.jpeg" class="img-fit">
-
+      <div class="timeline-body">
+        <img src="images/DOS_graph.jpeg" class="img-fit" alt="Density of states for 0D, 1D, 2D and 3D systems">
       </div>
 
-  
-
-      
     </main>
 
   </div>
+
+  <script>
+  (function () {
+    /* ---------- settings ---------- */
+    const EMAX = 12;     // energy range on the x-axis (units of E0)
+    const YMAX = 5;      // DOS range on the y-axis (units of g0)
+    const N = 1000;      // number of sample points
+
+    const canvas = document.getElementById("dos-canvas");
+    const wrap = canvas.parentElement;
+    const ctx = canvas.getContext("2d");
+    const $ = (id) => document.getElementById(id);
+
+    const rootStyle = getComputedStyle(document.documentElement);
+    const cssVar = (name) => rootStyle.getPropertyValue(name).trim();
+    const COLORS = [cssVar("--dos-0"), cssVar("--dos-1"), cssVar("--dos-2"), cssVar("--dos-3")];
+    const TEXT = cssVar("--text"), MUTED = cssVar("--muted");
+    const GRID = "#eef0f3", AXIS = "#9ca3af", REF = "#9ca3af";
+    const FONT = getComputedStyle(document.body).fontFamily;
+    const TITLES = ["0D · quantum dot", "1D · quantum wire", "2D · quantum well", "3D · bulk"];
+    const SHORT = ["0D", "1D", "2D", "3D"];
+
+    const dE = EMAX / (N - 1);
+    const E = Float64Array.from({ length: N }, (_, i) => i * dE);
+
+    const state = {
+      show: [true, true, true, true],
+      view: "overlay",
+      lam: 1.5,       // L / L0
+      EF: 6,
+      sigma: 0.08,
+      hoverE: null
+    };
+
+    let g = null;      // g[d][i] = DOS of dimension d at E[i]
+    let lv = null;     // sub-band energies
+    let panels = [];
+
+    /* ---------- physics ---------- */
+
+    // Infinite square well levels: n^2 E1 per confined direction (n = 1, 2, ...)
+    function computeLevels(lam) {
+      const e1 = 1 / (lam * lam);
+      const top = EMAX + 1;
+      const well = [], wire = [], dot = [];
+      for (let n = 1; n * n * e1 <= top; n++) {
+        const a = n * n * e1;
+        well.push(a);
+        for (let m = 1; a + m * m * e1 <= top; m++) {
+          const b = a + m * m * e1;
+          wire.push(b);
+          for (let l = 1; b + l * l * e1 <= top; l++) {
+            dot.push(b + l * l * e1);
+          }
+        }
+      }
+      return { well, wire, dot };
+    }
+
+    function computeDOS() {
+      const { lam, sigma } = state;
+      lv = computeLevels(lam);
+      const g0 = new Float64Array(N), g1 = new Float64Array(N),
+            g2 = new Float64Array(N), g3 = new Float64Array(N);
+
+      // 3D bulk: sqrt(E)
+      for (let i = 0; i < N; i++) g3[i] = Math.sqrt(E[i]);
+
+      // 2D well: each sub-band adds a constant 1/lam (a staircase)
+      for (const a of lv.well) {
+        for (let i = Math.ceil(a / dE - 1e-9); i < N; i++) g2[i] += 1 / lam;
+      }
+
+      // 1D wire: each sub-band adds (2 / pi lam^2) / sqrt(E - Enm)
+      const c1 = 2 / (Math.PI * lam * lam);
+      for (const b of lv.wire) {
+        for (let i = Math.floor(b / dE) + 1; i < N; i++) {
+          g1[i] += c1 / Math.sqrt(Math.max(E[i] - b, 1e-9));
+        }
+      }
+
+      // 0D dot: each level adds (4 / pi lam^3) delta(E - Enml), drawn as a Gaussian
+      const norm = 4 / (Math.PI * lam ** 3) / (sigma * Math.sqrt(2 * Math.PI));
+      const w = Math.ceil(5 * sigma / dE);
+      for (const c of lv.dot) {
+        const k = Math.round(c / dE);
+        for (let i = Math.max(0, k - w); i <= Math.min(N - 1, k + w); i++) {
+          const x = (E[i] - c) / sigma;
+          g0[i] += norm * Math.exp(-0.5 * x * x);
+        }
+      }
+
+      g = [g0, g1, g2, g3];
+    }
+
+    // Exact number of states per volume below EF (integral of g from 0 to EF)
+    function filledStates(EF) {
+      const { lam } = state;
+      const n = [0, 0, 0, 0];
+      n[3] = (2 / 3) * Math.pow(EF, 1.5);
+      for (const a of lv.well) if (a < EF) n[2] += (EF - a) / lam;
+      for (const b of lv.wire) if (b < EF) n[1] += (4 / (Math.PI * lam * lam)) * Math.sqrt(EF - b);
+      for (const c of lv.dot) if (c < EF) n[0] += 4 / (Math.PI * lam ** 3);
+      return n;
+    }
+
+    /* ---------- drawing ---------- */
+
+    const visibleDims = () => [0, 1, 2, 3].filter((d) => state.show[d]);
+
+    function canvasHeight(w) {
+      const count = visibleDims().length;
+      if (state.view === "overlay" || count <= 1) {
+        return Math.round(Math.min(440, Math.max(280, w * 0.62)));
+      }
+      const rows = Math.ceil(count / 2);
+      return rows * Math.round(Math.min(300, Math.max(190, w * 0.42)));
+    }
+
+    function layout(w, h) {
+      const dims = visibleDims();
+      if (state.view === "overlay" || dims.length <= 1) {
+        return [{ x: 0, y: 0, w, h, dims, title: null }];
+      }
+      const rows = Math.ceil(dims.length / 2);
+      const pw = w / 2, ph = h / rows;
+      return dims.map((d, k) => ({
+        x: (k % 2) * pw, y: Math.floor(k / 2) * ph, w: pw, h: ph,
+        dims: [d], title: TITLES[d]
+      }));
+    }
+
+    function tracePath(X, Y, arr, iEnd) {
+      ctx.beginPath();
+      for (let i = 0; i <= iEnd; i++) {
+        const x = X(E[i]), y = Y(arr[i]);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+      }
+    }
+
+    function drawPanel(p) {
+      const compact = p.title !== null;
+      const m = compact ? { l: 34, r: 12, t: 30, b: 26 } : { l: 48, r: 16, t: 18, b: 44 };
+      const x0 = p.x + m.l, y0 = p.y + m.t;
+      const pw = p.w - m.l - m.r, ph = p.h - m.t - m.b;
+      p.plot = { x0, y0, pw, ph };
+
+      const X = (e) => x0 + (e / EMAX) * pw;
+      const Y = (v) => y0 + ph - (Math.min(v, YMAX * 1.1) / YMAX) * ph;
+      const fs = compact ? 11 : 12;
+
+      // grid and tick labels
+      ctx.font = fs + "px " + FONT;
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = GRID;
+      ctx.fillStyle = MUTED;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      const xStep = pw < 260 ? 4 : 2;
+      for (let e = 0; e <= EMAX; e += xStep) {
+        const x = Math.round(X(e)) + 0.5;
+        ctx.beginPath(); ctx.moveTo(x, y0); ctx.lineTo(x, y0 + ph); ctx.stroke();
+        ctx.fillText(String(e), x, y0 + ph + 5);
+      }
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      for (let v = 0; v <= YMAX; v++) {
+        const y = Math.round(Y(v)) + 0.5;
+        ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x0 + pw, y); ctx.stroke();
+        ctx.fillText(String(v), x0 - 6, y);
+      }
+
+      // axes
+      ctx.strokeStyle = AXIS;
+      ctx.beginPath();
+      ctx.moveTo(x0 + 0.5, y0);
+      ctx.lineTo(x0 + 0.5, y0 + ph + 0.5);
+      ctx.lineTo(x0 + pw, y0 + ph + 0.5);
+      ctx.stroke();
+
+      // axis titles / panel title
+      if (!compact) {
+        ctx.fillStyle = MUTED;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "bottom";
+        ctx.fillText("Energy  E / E\u2080", x0 + pw / 2, p.y + p.h - 4);
+        ctx.save();
+        ctx.translate(p.x + 13, y0 + ph / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textBaseline = "middle";
+        ctx.fillText("DOS  g(E) / g\u2080", 0, 0);
+        ctx.restore();
+      } else {
+        ctx.fillStyle = COLORS[p.dims[0]];
+        ctx.font = "600 12px " + FONT;
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        ctx.fillText(p.title, x0, p.y + 15);
+      }
+
+      // everything below is clipped to the plot area
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(x0, y0 - 2, pw + 2, ph + 2);
+      ctx.clip();
+
+      // shaded (filled) states below EF
+      const iF = Math.min(N - 1, Math.round(state.EF / dE));
+      for (const d of p.dims) {
+        ctx.fillStyle = COLORS[d] + "22";
+        tracePath(X, Y, g[d], iF);
+        ctx.lineTo(X(E[iF]), Y(0));
+        ctx.lineTo(X(0), Y(0));
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      // bulk sqrt(E) reference in side-by-side panels
+      if (compact && p.dims[0] !== 3) {
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = REF;
+        ctx.lineWidth = 1.25;
+        tracePath(X, Y, g[3], N - 1);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+
+      // DOS curves
+      ctx.lineWidth = 2;
+      ctx.lineJoin = "round";
+      for (const d of p.dims) {
+        ctx.strokeStyle = COLORS[d];
+        tracePath(X, Y, g[d], N - 1);
+        ctx.stroke();
+      }
+
+      // Fermi level
+      const xf = X(state.EF);
+      ctx.setLineDash([5, 4]);
+      ctx.strokeStyle = TEXT;
+      ctx.lineWidth = 1.25;
+      ctx.beginPath(); ctx.moveTo(xf, y0); ctx.lineTo(xf, y0 + ph); ctx.stroke();
+      ctx.setLineDash([]);
+
+      // hover crosshair
+      if (state.hoverE !== null) {
+        const xh = X(state.hoverE);
+        const ih = Math.round(state.hoverE / dE);
+        ctx.strokeStyle = MUTED;
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(xh, y0); ctx.lineTo(xh, y0 + ph); ctx.stroke();
+        for (const d of p.dims) {
+          const v = g[d][ih];
+          if (v > YMAX * 1.05) continue;
+          ctx.fillStyle = "#fff";
+          ctx.beginPath(); ctx.arc(xh, Y(v), 4.5, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = COLORS[d];
+          ctx.beginPath(); ctx.arc(xh, Y(v), 3.5, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+      ctx.restore();
+
+      // E_F label
+      const right = xf > x0 + pw - 34;
+      ctx.fillStyle = TEXT;
+      ctx.font = "600 " + fs + "px " + FONT;
+      ctx.textBaseline = "top";
+      ctx.textAlign = "left";
+      const wE = ctx.measureText("E").width;
+      ctx.font = "600 " + (fs - 3) + "px " + FONT;
+      const wF = ctx.measureText("F").width;
+      const lx = right ? xf - 5 - wE - wF : xf + 5;
+      ctx.fillText("F", lx + wE, y0 + 3 + fs * 0.45);
+      ctx.font = "600 " + fs + "px " + FONT;
+      ctx.fillText("E", lx, y0 + 3);
+    }
+
+    function draw() {
+      const w = wrap.clientWidth;
+      const h = canvas.clientHeight;
+      ctx.clearRect(0, 0, w, h);
+      panels = layout(w, h);
+      panels.forEach(drawPanel);
+
+      if (!visibleDims().length) {
+        ctx.fillStyle = MUTED;
+        ctx.font = "14px " + FONT;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("Select a dimension above to plot it.", w / 2, h / 2);
+      }
+      updateReadout();
+    }
+
+    let frame = 0;
+    function schedule() {
+      if (!frame) frame = requestAnimationFrame(() => { frame = 0; draw(); });
+    }
+
+    let lastWidth = 0;
+    function resize(force) {
+      const w = wrap.clientWidth;
+      if (!force && w === lastWidth) return;
+      lastWidth = w;
+      const h = canvasHeight(w);
+      const dpr = window.devicePixelRatio || 1;
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      draw();
+    }
+
+    /* ---------- text outputs ---------- */
+
+    function fmt(v) {
+      if (v >= 100) return "> 100";
+      return v.toFixed(2);
+    }
+
+    function updateReadout() {
+      const el = $("dos-readout");
+      const dims = visibleDims();
+      if (state.hoverE === null || !dims.length) {
+        el.textContent = "Hover over (or drag across) the graph to read off values.";
+        return;
+      }
+      const i = Math.round(state.hoverE / dE);
+      const parts = dims.map((d) =>
+        `<span style="color:${COLORS[d]};font-weight:600">${SHORT[d]}</span> ${fmt(g[d][i])}`);
+      el.innerHTML = `E = ${state.hoverE.toFixed(2)} E\u2080 &nbsp;·&nbsp; g(E): ` + parts.join(" &nbsp; ");
+    }
+
+    function updateFilled() {
+      const n = filledStates(state.EF);
+      const dims = [3, 2, 1, 0].filter((d) => state.show[d]);
+      $("dos-fill").innerHTML = dims.length
+        ? dims.map((d) =>
+            `<span class="dos-fill-item"><i style="background:${COLORS[d]}"></i>${SHORT[d]} <strong>${n[d].toFixed(2)}</strong></span>`
+          ).join("")
+        : "<span>–</span>";
+    }
+
+    function updateOutputs() {
+      $("dos-L-out").textContent = `${state.lam.toFixed(2)} L\u2080 (E\u2081 = ${(1 / state.lam ** 2).toFixed(2)} E\u2080)`;
+      $("dos-EF-out").textContent = `${state.EF.toFixed(2)} E\u2080`;
+      $("dos-sigma-out").textContent = `${state.sigma.toFixed(2)} E\u2080`;
+    }
+
+    /* ---------- controls ---------- */
+
+    $("dos-L").addEventListener("input", (e) => {
+      state.lam = +e.target.value;
+      computeDOS(); updateOutputs(); updateFilled(); schedule();
+    });
+
+    $("dos-EF").addEventListener("input", (e) => {
+      state.EF = +e.target.value;
+      updateOutputs(); updateFilled(); schedule();
+    });
+
+    $("dos-sigma").addEventListener("input", (e) => {
+      state.sigma = +e.target.value;
+      computeDOS(); updateOutputs(); schedule();
+    });
+
+    document.querySelectorAll(".dos-chips input").forEach((input) => {
+      input.addEventListener("change", () => {
+        state.show[+input.value] = input.checked;
+        updateFilled();
+        resize(true);
+      });
+    });
+
+    document.querySelectorAll(".seg button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.view = btn.dataset.view;
+        document.querySelectorAll(".seg button").forEach((b) =>
+          b.setAttribute("aria-pressed", String(b === btn)));
+        resize(true);
+      });
+    });
+
+    function hoverFromEvent(ev) {
+      const r = canvas.getBoundingClientRect();
+      const mx = ev.clientX - r.left, my = ev.clientY - r.top;
+      const p = panels.find((q) => mx >= q.x && mx < q.x + q.w && my >= q.y && my < q.y + q.h);
+      if (!p || !p.plot) return;
+      const e = ((mx - p.plot.x0) / p.plot.pw) * EMAX;
+      state.hoverE = e >= 0 && e <= EMAX ? e : null;
+      schedule();
+    }
+
+    canvas.addEventListener("pointermove", hoverFromEvent);
+    canvas.addEventListener("pointerdown", hoverFromEvent);
+    canvas.addEventListener("pointerleave", () => { state.hoverE = null; schedule(); });
+
+    /* ---------- start ---------- */
+    computeDOS();
+    updateOutputs();
+    updateFilled();
+    resize(true);
+
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(() => resize(false)).observe(wrap);
+    } else {
+      window.addEventListener("resize", () => resize(false));
+    }
+  })();
+  </script>
 
 </body>
 </html>
