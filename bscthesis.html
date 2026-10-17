@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gust Mitigation Thesis | Martin Gregory-Eaves</title>
+  <meta name="description" content="BSc Applied Physics thesis: a bird-inspired airfoil with an embedded array of 11 BMP280 pressure sensors for detecting turbulence.">
+
+  <style>
+    :root {
+      --text: #1a1a1a;
+      --muted: #5c5c5c;
+      --line: #e3e3e3;
+      --soft: #f6f6f6;
+      --accent: #e8711a;      /* orange, matching the printed sensor section */
+      --accent-dark: #b9550c;
+      --maxw: 880px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      background: #ffffff;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 17px;
+      line-height: 1.65;
+    }
+    /* ---------- BACK BUTTON ---------- */
+    /* Zero-height sticky bar: the button hangs just left of the text column
+       and follows you down the page without pushing the content down. */
+    .back {
+      position: sticky;
+      top: 32px;
+      height: 0;
+      z-index: 5;
+    }
+    .back a {
+      position: absolute;
+      right: calc(100% + 16px);   /* 16px gap to the left of the text */
+      top: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+      transition: background .15s ease, border-color .15s ease;
+    }
+    .back a:hover {
+      background: rgba(0,160,110,.16);
+      border-color: #d1d5db;
+    }
+    /* Not enough room beside the text on smaller screens: put it above the title instead */
+    @media (max-width: 1120px) {
+      .back { position: static; height: auto; margin-bottom: 24px; }
+      .back a { position: static; }
+    }
+
+    main {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 48px 16px 80px;
+    }
+
+    h1, h2, h3 { line-height: 1.25; margin: 0; }
+    h1 { font-size: clamp(1.7rem, 4.5vw, 2.5rem); letter-spacing: -0.01em; }
+    h2 { font-size: 1.45rem; margin-top: 64px; margin-bottom: 14px; }
+    h3 { font-size: 1.1rem; margin-top: 32px; margin-bottom: 8px; }
+    p  { margin: 0 0 1em; }
+    a  { color: var(--accent-dark); }
+
+    .eyebrow {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent-dark);
+      margin-bottom: 10px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-top: 14px;
+    }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .tags span {
+      font-size: 0.8rem;
+      padding: 3px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+    }
+
+    /* Figures */
+    figure { margin: 28px 0; }
+    figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    figcaption {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    a.zoomable { display: block; cursor: zoom-in; }
+
+    .grid-2 { display: grid; gap: 16px; grid-template-columns: repeat(2, 1fr); }
+    .grid-2 figure { margin: 0; }
+    @media (max-width: 640px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* Thesis viewer */
+    .viewer {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 18px;
+    }
+    .viewer-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+    .viewer-bar .group { display: flex; align-items: center; gap: 6px; }
+    .viewer-bar .spacer { flex: 1; }
+    .btn {
+      font: inherit;
+      font-size: 0.88rem;
+      min-width: 34px;
+      height: 34px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn:hover { border-color: #bdbdbd; }
+    .btn:disabled { opacity: 0.4; cursor: default; }
+    .viewer-bar input[type="number"] {
+      width: 56px;
+      height: 34px;
+      font: inherit;
+      font-size: 0.88rem;
+      text-align: center;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+    .viewer-bar select {
+      height: 34px;
+      font: inherit;
+      font-size: 0.88rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      padding: 0 6px;
+      max-width: 170px;
+    }
+    .viewer-bar .count { font-size: 0.88rem; color: var(--muted); }
+    .viewer-stage {
+      background: var(--soft);
+      padding: 16px;
+      overflow: auto;
+      min-height: 420px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      outline: none;
+    }
+    .viewer-stage canvas {
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+      display: block;
+    }
+    .viewer-status {
+      font-size: 0.9rem;
+      color: var(--muted);
+      padding: 40px 16px;
+      text-align: center;
+    }
+    .viewer-fallback iframe {
+      width: 100%;
+      height: 80vh;
+      border: none;
+      display: block;
+    }
+
+    /* Lightbox */
+    dialog.lightbox {
+      border: none;
+      padding: 0;
+      background: transparent;
+      max-width: 96vw;
+      max-height: 94vh;
+    }
+    dialog.lightbox::backdrop { background: rgba(0,0,0,0.82); }
+    dialog.lightbox img {
+      display: block;
+      max-width: 96vw;
+      max-height: 86vh;
+      background: #fff;
+      border-radius: 6px;
+    }
+    dialog.lightbox p { color: #eee; font-size: 0.88rem; margin: 8px 4px 0; }
+    dialog.lightbox .close {
+      position: fixed;
+      top: 14px;
+      right: 16px;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    footer {
+      margin-top: 72px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+<main>
+  <!-- BACK BUTTON -->
+  <nav class="back">
+    <a href="projetcts.html">← Back</a>
+  </nav>
+
+  <header>
+    <div class="eyebrow">Bachelor Thesis · BSc Applied Physics</div>
+    <h1>Gust Mitigation for Small Fixed-Wing Aerial Vehicles</h1>
+    <p class="meta">Lentink Lab, University of Groningen · July 2026</p>
+    <div class="tags">
+      <span>Biomimetics</span><span>SolidWorks</span><span>3D printing</span>
+      <span>Teensy 4.1</span><span>SPI</span><span>Python</span>
+    </div>
+  </header>
+
+  <figure>
+    <a class="zoomable" href="images/airfoil.jpeg">
+      <img src="images/airfoil.jpeg" alt="The assembled 3D-printed Eppler 423 wing: two white outer sections and an orange middle section with a diagonal line of small pressure taps.">
+    </a>
+    <figcaption>The 3D-printed wing. The orange section holds the pressure sensors.</figcaption>
+  </figure>
+
+  <h2>The idea</h2>
+  <p>
+    Small drones fly in the atmospheric boundary layer, where turbulence is intense and gusts often lead to
+    collisions. Inertial sensors only react once the drone has already been knocked off course. Birds instead
+    feel the flow with sensors across their wings. This project asks whether basic barometric pressure sensors
+    on a wing can do the same and detect turbulence before it moves the vehicle.
+  </p>
+
+  <h2>What I built</h2>
+  <p>
+    A bird-inspired Eppler 423 wing, designed in SolidWorks and 3D printed, with 11 BMP280 pressure sensors
+    (7 on top, 4 on the bottom) across the first 30% of the chord. The sensors sit behind small taps in a
+    diagonal cascade to keep the surface smooth, and all eleven share one SPI bus to a Teensy 4.1.
+  </p>
+  <figure>
+    <a class="zoomable" href="images/wiringbmp.jpeg">
+      <img src="images/wiringbmp.jpeg" alt="KiCad electrical drawing of the electronics used in the setup.">
+    </a>
+    <figcaption>BMP280 pressure sensors wired to the Teensy 4.1.</figcaption>
+  </figure>
+
+  <div class="grid-2">
+    <figure>
+      <a class="zoomable" href="images/open_foil.jpeg">
+        <img src="images/open_foil.jpeg" alt="The two halves of the orange middle section opened up, showing the BMP280 sensor boards and their wiring.">
+      </a>
+      <figcaption>Sensor wiring inside the wing.</figcaption>
+    </figure>
+    <figure>
+      <a class="zoomable" href="images/setup.jpeg">
+        <img src="images/setup.jpeg" alt="The wing mounted horizontally on two tripods in front of the active turbulence grid of the wind tunnel.">
+      </a>
+      <figcaption>Wind-tunnel testing in front of the active turbulence grid.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Results</h2>
+  <p>
+    Tested at 6.5 m/s and a 6° angle of attack, the array clearly picked up the formation of lift, a steady
+    pressure difference of about 23 Pa between the bottom and top surfaces. It also told smooth flow apart
+    from turbulent flow and distinguished between different types of turbulence, with the leading-edge
+    sensors responding most strongly.
+  </p>
+  <p>
+    The limit is sensitivity: at this speed the total dynamic pressure is only about 26 Pa, close to the
+    sensor's accuracy, so weak gusts get lost in the noise. Faster, more sensitive sensors and a wing free to
+    rotate are the next steps towards true fly-by-feel control.
+  </p>
+
+  <!-- ============ INTERACTIVE THESIS ============ -->
+  <h2 id="read">Read the thesis</h2>
+  <div class="viewer" id="viewer">
+    <div class="viewer-bar">
+      <div class="group">
+        <button class="btn" id="prev" type="button" aria-label="Previous page">&#8249;</button>
+        <input id="page-input" type="number" min="1" value="1" aria-label="Page number">
+        <span class="count">/ <span id="page-count">–</span></span>
+        <button class="btn" id="next" type="button" aria-label="Next page">&#8250;</button>
+      </div>
+      <div class="group">
+        <select id="chapter" aria-label="Jump to chapter">
+          <option value="">Jump to…</option>
+          <option value="1">Title page</option>
+          <option value="2">Abstract</option>
+          <option value="6">1 · Introduction</option>
+          <option value="8">2 · Theory</option>
+          <option value="14">3 · Literature review</option>
+          <option value="18">4 · Methods</option>
+          <option value="23">5 · Results</option>
+          <option value="30">6 · Discussion</option>
+          <option value="32">7 · Conclusion</option>
+          <option value="34">Bibliography</option>
+          <option value="36">Appendix</option>
+        </select>
+      </div>
+      <div class="spacer"></div>
+      <div class="group">
+        <button class="btn" id="zoom-out" type="button" aria-label="Zoom out">−</button>
+        <button class="btn" id="zoom-fit" type="button">Fit</button>
+        <button class="btn" id="zoom-in" type="button" aria-label="Zoom in">+</button>
+        <a class="btn" id="download" href="#" download>Download PDF</a>
+      </div>
+    </div>
+    <div class="viewer-stage" id="stage" tabindex="0" aria-label="Thesis page. Use the arrow keys to change pages.">
+      <div class="viewer-status" id="status">Loading thesis…</div>
+      <canvas id="canvas" hidden></canvas>
+    </div>
+  </div>
+
+  <footer>
+    BSc Applied Physics, Faculty of Science and Engineering, University of Groningen, 2026.
+  </footer>
+</main>
+
+<!-- Lightbox for enlarging figures -->
+<dialog class="lightbox" id="lightbox" aria-label="Enlarged figure">
+  <button class="close" type="button" aria-label="Close">&times;</button>
+  <img alt="">
+  <p></p>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+/* ---------- Lightbox ---------- */
+(function () {
+  const dlg = document.getElementById('lightbox');
+  if (!dlg || typeof dlg.showModal !== 'function') return; // plain links still open the image
+  const img = dlg.querySelector('img');
+  const cap = dlg.querySelector('p');
+
+  document.addEventListener('click', function (e) {
+    const link = e.target.closest('a.zoomable');
+    if (!link) return;
+    e.preventDefault();
+    const inner = link.querySelector('img');
+    img.src = link.getAttribute('href');
+    img.alt = inner ? inner.alt : '';
+    const fc = link.closest('figure') && link.closest('figure').querySelector('figcaption');
+    cap.textContent = fc ? fc.textContent : '';
+    dlg.showModal();
+  });
+  dlg.addEventListener('click', function (e) {
+    if (e.target === dlg || e.target.classList.contains('close')) dlg.close();
+  });
+})();
+
+
+/* ---------- Interactive thesis viewer (PDF.js) ---------- */
+(function () {
+  // Path to the thesis, relative to this page. If the PDF has a different name
+  // or lives in another folder, change it here only.
+  const PDF_URL = 'pdfs/An_Investigation_into_Gust_Mitigation_Strategies_for_Small_Fixed_Wing_Aerial_Vehicles.pdf';
+  document.getElementById('download').href = PDF_URL;
+  const stage = document.getElementById('stage');
+  const canvas = document.getElementById('canvas');
+  const status = document.getElementById('status');
+  const pageInput = document.getElementById('page-input');
+  const pageCount = document.getElementById('page-count');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const chapter = document.getElementById('chapter');
+
+  let pdf = null;
+  let pageNum = 1;
+  let zoom = null;          // null = fit to width
+  let renderTask = null;
+  let pending = null;
+
+  function message(html) {
+    stage.innerHTML = '<div class="viewer-status">' + html + '</div>';
+  }
+
+  function fallback() {
+    // Interactive viewer unavailable: show the PDF with the browser's own viewer instead.
+    stage.innerHTML =
+      '<div class="viewer-fallback" style="width:100%">' +
+      '<iframe src="' + PDF_URL + '" title="Thesis PDF"></iframe>' +
+      '<p class="viewer-status" style="padding:12px">Not showing? ' +
+      '<a href="' + PDF_URL + '" target="_blank" rel="noopener">Open the thesis PDF</a></p></div>';
+  }
+
+  // Opened by double-clicking the file (file://): browsers block the interactive
+  // viewer from reading local files, so use the built-in PDF viewer instead.
+  // Everything works normally once the page is on GitHub Pages.
+  if (location.protocol === 'file:' || !window.pdfjsLib) { fallback(); return; }
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  function fitScale(page) {
+    const avail = stage.clientWidth - 32;           // stage padding
+    const base = page.getViewport({ scale: 1 }).width;
+    return Math.max(0.3, Math.min(avail / base, 2.2));
+  }
+
+  async function render(num) {
+    if (renderTask) { pending = num; return; }
+    const page = await pdf.getPage(num);
+    const scale = zoom || fitScale(page);
+    const dpr = window.devicePixelRatio || 1;
+    const vp = page.getViewport({ scale: scale });
+
+    canvas.width = Math.floor(vp.width * dpr);
+    canvas.height = Math.floor(vp.height * dpr);
+    canvas.style.width = Math.floor(vp.width) + 'px';
+    canvas.style.height = Math.floor(vp.height) + 'px';
+
+    const ctx = canvas.getContext('2d');
+    renderTask = page.render({
+      canvasContext: ctx,
+      viewport: vp,
+      transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null
+    });
+    try { await renderTask.promise; } catch (e) { /* cancelled */ }
+    renderTask = null;
+
+    status.hidden = true;
+    canvas.hidden = false;
+    pageInput.value = num;
+    prevBtn.disabled = num <= 1;
+    nextBtn.disabled = num >= pdf.numPages;
+
+    if (pending !== null) { const n = pending; pending = null; render(n); }
+  }
+
+  function go(num) {
+    if (!pdf) return;
+    num = Math.max(1, Math.min(pdf.numPages, num | 0));
+    pageNum = num;
+    render(pageNum);
+  }
+
+  async function currentFit() {
+    const page = await pdf.getPage(pageNum);
+    return fitScale(page);
+  }
+
+  prevBtn.addEventListener('click', function () { go(pageNum - 1); });
+  nextBtn.addEventListener('click', function () { go(pageNum + 1); });
+  pageInput.addEventListener('change', function () { go(parseInt(pageInput.value, 10) || 1); });
+  chapter.addEventListener('change', function () {
+    if (chapter.value) go(parseInt(chapter.value, 10));
+    chapter.value = '';
+  });
+  document.getElementById('zoom-in').addEventListener('click', async function () {
+    zoom = Math.min((zoom || await currentFit()) * 1.2, 4); render(pageNum);
+  });
+  document.getElementById('zoom-out').addEventListener('click', async function () {
+    zoom = Math.max((zoom || await currentFit()) / 1.2, 0.3); render(pageNum);
+  });
+  document.getElementById('zoom-fit').addEventListener('click', function () {
+    zoom = null; render(pageNum);
+  });
+  stage.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); go(pageNum + 1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'PageUp')   { e.preventDefault(); go(pageNum - 1); }
+  });
+
+  let resizeTimer;
+  window.addEventListener('resize', function () {
+    if (zoom !== null || !pdf) return;
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () { render(pageNum); }, 150);
+  });
+
+  pdfjsLib.getDocument({ url: PDF_URL }).promise.then(function (doc) {
+    pdf = doc;
+    pageCount.textContent = doc.numPages;
+    pageInput.max = doc.numPages;
+    render(1);
+  }).catch(function (err) {
+    console.error(err);
+    if (err && err.name === 'MissingPDFException') {
+      message('Could not find the thesis PDF at <code>' + PDF_URL + '</code>.<br>' +
+              'Check that the file is uploaded to GitHub with exactly this name and folder ' +
+              '(GitHub Pages is case-sensitive).');
+    } else {
+      fallback();
+    }
+  });
+})();
+</script>
+</body>
+</html>
