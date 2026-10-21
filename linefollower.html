@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Density of States (DOS) Visualisation</title>
+  <title>PID Line-Following Rover | Martin Gregory-Eaves</title>
+  <meta name="description" content="PID line following and obstacle detection on an Arduino rover, with an interactive simulation of the P, I and D gains." />
 
   <style>
     :root{
@@ -12,6 +13,11 @@
       --muted: #6b7280;
       --accent: #2563eb;
       --border: #e5e7eb;
+      --soft: #f7f7f8;
+      --green: rgba(0,160,110,.16);
+      --p: #2563eb;   /* proportional */
+      --i: #b45309;   /* integral */
+      --d: #7c3aed;   /* derivative */
     }
 
     *{ box-sizing: border-box; }
@@ -40,7 +46,6 @@
       top: 32px;
       align-self: start;
     }
-
     .back a{
       display: inline-flex;
       align-items: center;
@@ -54,99 +59,170 @@
       font-size: 14px;
       transition: background .15s ease, border-color .15s ease;
     }
-
-    .back a:hover{
-      background: rgba(0,160,110,.16);
-      border-color: #d1d5db;
-    }
+    .back a:hover{ background: var(--green); border-color: #d1d5db; }
 
     /* ---------- CONTENT ---------- */
-    .content{
-      max-width: 720px;
-    }
+    .content{ max-width: 720px; min-width: 0; }
 
     h1{
-      font-size: clamp(32px, 4vw, 42px);
+      font-size: clamp(30px, 4vw, 40px);
       line-height: 1.15;
       margin: 0 0 10px 0;
       letter-spacing: -0.02em;
     }
-
-    .subtitle{
-      color: var(--muted);
-      margin-bottom: 28px;
-      font-size: 16px;
-    }
-
-    h2{
-      margin-top: 42px;
-      margin-bottom: 10px;
-      font-size: 22px;
-      letter-spacing: -0.01em;
-    }
-
-    p{
-      margin: 14px 0;
-      font-size: 16px;
-    }
-
-    ul{
-      margin: 14px 0 14px 18px;
-    }
-
+    .subtitle{ color: var(--muted); margin-bottom: 28px; font-size: 16px; }
+    h2{ margin-top: 46px; margin-bottom: 10px; font-size: 22px; letter-spacing: -0.01em; }
+    h3{ margin: 26px 0 6px; font-size: 17px; }
+    p{ margin: 14px 0; font-size: 16px; }
+    ul{ margin: 14px 0 14px 18px; padding-left: 4px; }
     li{ margin-bottom: 8px; }
 
-    /* ---------- META / TAGS ---------- */
-    .meta{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-
+    /* ---------- TAGS ---------- */
+    .meta{ display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
     .tag{
       padding: 6px 10px;
       font-size: 13px;
       border-radius: 999px;
-      background: rgba(0,160,110,.16);
+      background: var(--green);
       font-weight: 600;
     }
 
-    /* ---------- LINKS ---------- */
-    .links{
-      margin-top: 24px;
+    .img-fit{
+      display: block;
+      margin: 0 auto 0.5rem auto;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .caption{ font-size: 14px; color: var(--muted); text-align: center; margin-top: 0; }
+
+    /* ---------- PID EQUATION ---------- */
+    .equation{
+      font-family: "Times New Roman", Georgia, serif;
+      font-size: clamp(17px, 2.6vw, 21px);
+      text-align: center;
+      padding: 16px 12px;
+      margin: 18px 0;
+      background: var(--soft);
+      border-radius: 10px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .equation i{ font-style: italic; }
+    .kp{ color: var(--p); font-weight: 700; }
+    .ki{ color: var(--i); font-weight: 700; }
+    .kd{ color: var(--d); font-weight: 700; }
+
+    .terms{ list-style: none; margin-left: 0; padding-left: 0; }
+    .terms li{
+      padding-left: 14px;
+      border-left: 3px solid var(--border);
+      margin-bottom: 14px;
+    }
+    .terms li.t-p{ border-color: var(--p); }
+    .terms li.t-i{ border-color: var(--i); }
+    .terms li.t-d{ border-color: var(--d); }
+
+    /* ---------- CODE ---------- */
+    pre{
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 18px 20px;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-size: 13.5px;
+      line-height: 1.55;
+      margin: 18px 0;
+    }
+    code{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    p code, li code{
+      background: var(--soft);
+      padding: 1px 6px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .c-com{ color: #94a3b8; }
+    .c-key{ color: #93c5fd; }
+    .c-num{ color: #fcd34d; }
+
+    /* ---------- SIMULATOR ---------- */
+    .sim{
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 18px;
+    }
+    .sim-stage{ position: relative; background: #fafaf7; }
+    #track{ display: block; width: 100%; height: auto; touch-action: manipulation; }
+    .sim-badge{
+      position: absolute;
+      top: 10px; left: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--border);
+    }
+    .sim-badge.lost{ background: #fee2e2; border-color: #fca5a5; color: #991b1b; }
+
+    .sim-panel{ padding: 16px 18px 18px; border-top: 1px solid var(--border); }
+
+    .presets{ display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .presets button, .sim-actions button{
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .presets button:hover, .sim-actions button:hover{ border-color: #c7cbd1; }
+    .presets button[aria-pressed="true"]{ background: var(--text); color: #fff; border-color: var(--text); }
+
+    .sliders{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
+    .slider label{
       display: flex;
-      gap: 16px;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 600;
     }
+    .slider output{ font-variant-numeric: tabular-nums; font-weight: 700; }
+    .slider small{ display: block; font-size: 12.5px; color: var(--muted); line-height: 1.4; margin-top: 2px; }
+    .slider input{ width: 100%; margin: 6px 0 0; }
+    #kp{ accent-color: var(--p); }
+    #ki{ accent-color: var(--i); }
+    #kd{ accent-color: var(--d); }
+    #spd{ accent-color: #374151; }
 
-    .links a{
-      font-weight: 700;
-      text-decoration: none;
-      color: var(--accent);
-      border-bottom: 2px solid transparent;
+    .sim-foot{
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 16px;
     }
+    .stats{ display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; color: var(--muted); }
+    .stats b{ color: var(--text); font-size: 15px; font-variant-numeric: tabular-nums; }
+    .sim-actions{ display: flex; gap: 8px; }
 
-    .links a:hover{
-      border-bottom-color: var(--accent);
-    }
-    .img-fit {
-  display: block;
-  margin: 0 auto 1rem auto; /* centers image + spacing below */
-  max-width: 100%;
-  height: auto;
-}
+    .plot-wrap{ margin-top: 14px; }
+    .plot-title{ font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+    #plot{ display: block; width: 100%; height: 110px; background: #fff; border: 1px solid var(--border); border-radius: 8px; }
 
+    .tip{ font-size: 14px; color: var(--muted); }
 
     /* ---------- RESPONSIVE ---------- */
     @media (max-width: 820px){
-      .page{
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-
-      .back{
-        position: static;
-      }
+      .page{ grid-template-columns: 1fr; gap: 20px; padding: 24px 16px 64px; }
+      .back{ position: static; }
+    }
+    @media (max-width: 560px){
+      .sliders{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -162,42 +238,487 @@
 
     <!-- CONTENT -->
     <main class="content">
-      <h1>Line following and obsticle detection implementation in a mobile robot</h1>
+      <h1>Line following and obstacle detection on a mobile robot</h1>
       <p class="subtitle">
-        Implementation of a PID algorithm via Arduino IDE for a rover with ultrasonic and infared sensors. 
+        A PID controller written in the Arduino IDE for a rover with infrared line sensors and an ultrasonic distance sensor.
       </p>
 
       <div class="meta">
         <span class="tag">Arduino IDE</span>
+        <span class="tag">C++</span>
+        <span class="tag">PID control</span>
         <span class="tag">Robotics</span>
       </div>
 
       <h2>Overview</h2>
       <p>
-        
-        The project bellow was done through following the Mechatronics course (WBIE011-05) at the University of Groningen. 
-        The robot itself was pre-made and as students we were tasked with writing and implementing the Arduino IDE code. 
-        The code consists of a PID controller for the infared and ultrasonic sensor.
+        This project was part of the Mechatronics course (WBIE011-05) at the University of Groningen.
+        The robot itself was pre-built; as students we were tasked with writing and implementing the Arduino code.
+        The code runs a PID controller that keeps the rover on a black line using its infrared sensors,
+        and stops it when the ultrasonic sensor detects an obstacle ahead.
       </p>
-      <h2>Demonstration</h2>
 
-        <img
-        class="img-fit"
-        src="images/rover.png"
-         alt="Line-following rover demonstration"
-        />
-        <p>
-          The video doesn not work as of right now as I am still learning on how to implement larger videos on Github pages. 
-          Come back soon for the full algorithm and video!
-        </p>
+      <img class="img-fit" src="images/rover.png" alt="The line-following rover used in the Mechatronics course" />
+      <p class="caption">The rover used in the course.</p>
 
+      <!-- ===================== PID ===================== -->
+      <h2>How PID control works</h2>
+      <p>
+        The infrared sensors measure how far the line is from the centre of the robot. That distance is the
+        <strong>error</strong>, <i>e</i>. Every 20&nbsp;ms the controller turns the error into a steering
+        correction <i>u</i>, which speeds up one wheel and slows down the other:
+      </p>
 
-  
+      <div class="equation" aria-label="u of t equals K p times e of t, plus K i times the integral of e, plus K d times the derivative of e">
+        <i>u</i>(<i>t</i>) =
+        <span class="kp"><i>K</i><sub>p</sub></span>&thinsp;<i>e</i>(<i>t</i>)
+        + <span class="ki"><i>K</i><sub>i</sub></span>&thinsp;&int;<sub>0</sub><sup><i>t</i></sup><i>e</i>(<i>&tau;</i>)&thinsp;d<i>&tau;</i>
+        + <span class="kd"><i>K</i><sub>d</sub></span>&thinsp;<sup>d<i>e</i></sup>&frasl;<sub>d<i>t</i></sub>
+      </div>
 
-      
+      <ul class="terms">
+        <li class="t-p"><strong class="kp">P, proportional:</strong> steer harder the further the robot is from the line.
+          Too little and it runs wide on bends; too much and it overshoots and wobbles from side to side.</li>
+        <li class="t-i"><strong class="ki">I, integral:</strong> adds up the error over time. On a long bend, P alone leaves
+          a constant offset; I keeps growing until that offset is gone. Too much I "winds up" and makes the robot swing.</li>
+        <li class="t-d"><strong class="kd">D, derivative:</strong> reacts to how fast the error is changing. It brakes the
+          steering before the robot overshoots, which damps the wobble. Too much D amplifies sensor noise and makes the robot twitchy.</li>
+      </ul>
+
+      <h3>The algorithm</h3>
+      <p>
+        A simplified version of the control loop is below. The line position is a weighted average of the
+        infrared readings, scaled from &minus;1 (line far left) to +1 (line far right). If the line is lost,
+        the robot keeps turning towards where it last saw it.
+      </p>
+
+<pre><code><span class="c-com">// Simplified PID line follower with obstacle stop (Arduino)</span>
+<span class="c-key">const int</span> NUM_SENSORS = <span class="c-num">5</span>;
+<span class="c-key">const int</span> irPins[NUM_SENSORS] = {A0, A1, A2, A3, A4};
+<span class="c-key">const int</span> TRIG_PIN = <span class="c-num">7</span>, ECHO_PIN = <span class="c-num">8</span>;
+<span class="c-key">const int</span> ENA = <span class="c-num">5</span>, IN1 = <span class="c-num">9</span>,  IN2 = <span class="c-num">10</span>;   <span class="c-com">// left motor</span>
+<span class="c-key">const int</span> ENB = <span class="c-num">6</span>, IN3 = <span class="c-num">11</span>, IN4 = <span class="c-num">12</span>;   <span class="c-com">// right motor</span>
+
+<span class="c-key">float</span> Kp = <span class="c-num">3.0</span>, Ki = <span class="c-num">1.5</span>, Kd = <span class="c-num">0.2</span>;
+<span class="c-key">const int</span> BASE_SPEED = <span class="c-num">150</span>;              <span class="c-com">// PWM, 0-255</span>
+<span class="c-key">const unsigned long</span> DT_MS = <span class="c-num">20</span>;          <span class="c-com">// 50 Hz control loop</span>
+<span class="c-key">const float</span> STOP_DISTANCE_CM = <span class="c-num">15.0</span>;
+
+<span class="c-key">float</span> integral = <span class="c-num">0</span>, lastError = <span class="c-num">0</span>;
+<span class="c-key">unsigned long</span> lastTime = <span class="c-num">0</span>;
+
+<span class="c-com">// Line position from the IR array: -1 (far left) ... 0 (centre) ... +1 (far right)</span>
+<span class="c-key">float</span> readLineError() {
+  <span class="c-key">long</span> weighted = <span class="c-num">0</span>, total = <span class="c-num">0</span>;
+  <span class="c-key">for</span> (<span class="c-key">int</span> i = <span class="c-num">0</span>; i &lt; NUM_SENSORS; i++) {
+    <span class="c-key">int</span> v = analogRead(irPins[i]);              <span class="c-com">// higher reading = darker = line</span>
+    weighted += (<span class="c-key">long</span>)v * (i - <span class="c-num">2</span>);              <span class="c-com">// sensor positions -2 ... +2</span>
+    total += v;
+  }
+  <span class="c-key">if</span> (total &lt; <span class="c-num">200</span>) <span class="c-key">return</span> lastError &gt; <span class="c-num">0</span> ? <span class="c-num">1.0</span> : <span class="c-num">-1.0</span>;  <span class="c-com">// line lost: keep turning the last way</span>
+  <span class="c-key">return</span> (<span class="c-key">float</span>)weighted / total / <span class="c-num">2.0</span>;
+}
+
+<span class="c-key">float</span> readDistanceCm() {
+  digitalWrite(TRIG_PIN, LOW);  delayMicroseconds(<span class="c-num">2</span>);
+  digitalWrite(TRIG_PIN, HIGH); delayMicroseconds(<span class="c-num">10</span>);
+  digitalWrite(TRIG_PIN, LOW);
+  <span class="c-key">unsigned long</span> us = pulseIn(ECHO_PIN, HIGH, <span class="c-num">6000</span>);   <span class="c-com">// give up after ~1 m</span>
+  <span class="c-key">return</span> us == <span class="c-num">0</span> ? <span class="c-num">999.0</span> : us * <span class="c-num">0.0343</span> / <span class="c-num">2.0</span>;     <span class="c-com">// speed of sound, there and back</span>
+}
+
+<span class="c-key">void</span> setMotor(<span class="c-key">int</span> en, <span class="c-key">int</span> inA, <span class="c-key">int</span> inB, <span class="c-key">int</span> speed) {
+  speed = constrain(speed, <span class="c-num">-255</span>, <span class="c-num">255</span>);
+  digitalWrite(inA, speed &gt;= <span class="c-num">0</span>);
+  digitalWrite(inB, speed &lt; <span class="c-num">0</span>);
+  analogWrite(en, abs(speed));
+}
+
+<span class="c-key">void</span> setup() {
+  <span class="c-key">int</span> outputs[] = {TRIG_PIN, ENA, IN1, IN2, ENB, IN3, IN4};
+  <span class="c-key">for</span> (<span class="c-key">int</span> pin : outputs) pinMode(pin, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  lastTime = millis();
+}
+
+<span class="c-key">void</span> loop() {
+  <span class="c-key">unsigned long</span> now = millis();
+  <span class="c-key">if</span> (now - lastTime &lt; DT_MS) <span class="c-key">return</span>;          <span class="c-com">// run the controller at a fixed rate</span>
+  <span class="c-key">float</span> dt = (now - lastTime) / <span class="c-num">1000.0</span>;
+  lastTime = now;
+
+  <span class="c-key">if</span> (readDistanceCm() &lt; STOP_DISTANCE_CM) {    <span class="c-com">// obstacle ahead: stop and reset</span>
+    setMotor(ENA, IN1, IN2, <span class="c-num">0</span>);
+    setMotor(ENB, IN3, IN4, <span class="c-num">0</span>);
+    integral = <span class="c-num">0</span>;
+    <span class="c-key">return</span>;
+  }
+
+  <span class="c-key">float</span> error = readLineError();
+  integral = constrain(integral + error * dt, <span class="c-num">-10</span>, <span class="c-num">10</span>);   <span class="c-com">// clamp to limit wind-up</span>
+  <span class="c-key">float</span> derivative = (error - lastError) / dt;
+  lastError = error;
+
+  <span class="c-key">float</span> u = Kp * error + Ki * integral + Kd * derivative;
+  <span class="c-key">int</span> correction = u * BASE_SPEED;
+  setMotor(ENA, IN1, IN2, BASE_SPEED + correction);   <span class="c-com">// line to the right: left wheel speeds up</span>
+  setMotor(ENB, IN3, IN4, BASE_SPEED - correction);
+}</code></pre>
+
+      <!-- ===================== SIMULATOR ===================== -->
+      <h2 id="simulator">Try it: tune the PID controller</h2>
+      <p>
+        The simulation below runs the same control law on a virtual rover. Drag the sliders or pick a preset
+        and watch how each gain changes the way it drives. The orange trail shows the robot's recent path, and the plot shows
+        the error over the last few seconds.
+      </p>
+
+      <div class="sim" id="sim">
+        <div class="sim-stage">
+          <canvas id="track" width="800" height="520" aria-label="Top-down view of a robot following a black line around a looping track"></canvas>
+          <div class="sim-badge" id="badge" aria-live="polite">On the line</div>
+        </div>
+
+        <div class="sim-panel">
+          <div class="presets" role="group" aria-label="Presets">
+            <button type="button" data-kp="0.3" data-ki="0" data-kd="0">P too low</button>
+            <button type="button" data-kp="1" data-ki="0" data-kd="0">P only</button>
+            <button type="button" data-kp="6" data-ki="0" data-kd="0">P too high</button>
+            <button type="button" data-kp="6" data-ki="0" data-kd="0.25">PD</button>
+            <button type="button" data-kp="3" data-ki="1.5" data-kd="0.2">PID</button>
+            <button type="button" data-kp="2" data-ki="5" data-kd="0">Too much I</button>
+            <button type="button" data-kp="3" data-ki="0" data-kd="1.5">Too much D</button>
+          </div>
+
+          <div class="sliders">
+            <div class="slider">
+              <label for="kp"><span class="kp">K<sub>p</sub> proportional</span><output id="kp-out">3.00</output></label>
+              <input id="kp" type="range" min="0" max="8" step="0.05" value="3">
+              <small>How hard it steers back towards the line.</small>
+            </div>
+            <div class="slider">
+              <label for="ki"><span class="ki">K<sub>i</sub> integral</span><output id="ki-out">1.50</output></label>
+              <input id="ki" type="range" min="0" max="8" step="0.05" value="1.5">
+              <small>Removes the offset that builds up on long bends.</small>
+            </div>
+            <div class="slider">
+              <label for="kd"><span class="kd">K<sub>d</sub> derivative</span><output id="kd-out">0.20</output></label>
+              <input id="kd" type="range" min="0" max="2" step="0.01" value="0.2">
+              <small>Damps the wobble by reacting to how fast the error changes.</small>
+            </div>
+            <div class="slider">
+              <label for="spd"><span>Base speed</span><output id="spd-out">150</output></label>
+              <input id="spd" type="range" min="60" max="240" step="5" value="150">
+              <small>Faster driving needs more careful tuning.</small>
+            </div>
+          </div>
+
+          <div class="plot-wrap">
+            <div class="plot-title">Error over the last 8 seconds (0 = centred on the line, shaded = line lost)</div>
+            <canvas id="plot" width="700" height="110" aria-label="Plot of the line error over time"></canvas>
+          </div>
+
+          <div class="sim-foot">
+            <div class="stats">
+              <span>Average error <b id="st-err">0.00</b></span>
+              <span>Laps <b id="st-laps">0</b></span>
+              <span>Resets <b id="st-resets">0</b></span>
+            </div>
+            <div class="sim-actions">
+              <button type="button" id="pause">Pause</button>
+              <button type="button" id="restart">Restart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="tip">
+        Things to try: start with <strong>P only</strong> and notice it drifts to the outside of every bend.
+        Push K<sub>p</sub> up until it wobbles, then add K<sub>d</sub> to calm it down. Finally add a little
+        K<sub>i</sub> and watch the average error drop, then push it too far and watch the robot swing.
+      </p>
     </main>
 
   </div>
 
+<script>
+/* ================= Line-follower simulation =================
+   Top-down rover with two driven wheels, an IR sensor bar a short distance ahead of the axle,
+   wheels that take ~0.1 s to reach a new speed, a 50 Hz controller and a little sensor noise.
+   Units: pixels and seconds. */
+(function () {
+  const canvas = document.getElementById('track');
+  const ctx = canvas.getContext('2d');
+  const plot = document.getElementById('plot');
+  const pctx = plot.getContext('2d');
+  const badge = document.getElementById('badge');
+  const WORLD_W = 800, WORLD_H = 520;
+
+  // ---- Track: a smooth three-lobed loop ----
+  const N = 720, track = [];
+  for (let i = 0; i < N; i++) {
+    const t = i / N * 2 * Math.PI;
+    const r = 190 * (1 + 0.22 * Math.sin(3 * t));
+    track.push({ x: 400 + 1.55 * r * Math.cos(t), y: 260 + 0.95 * r * Math.sin(t) });
+  }
+
+  // ---- Simulation state and parameters ----
+  const S = {
+    W: 22,        // half-width of the IR sensor bar
+    look: 24,     // sensor bar distance ahead of the wheel axle
+    L: 30,        // wheelbase
+    tau: 0.1,     // motor time constant
+    vmax: 320,    // top wheel speed
+    dtc: 0.02,    // controller period (50 Hz)
+    dtp: 0.004,   // physics step
+    noise: 0.03,  // sensor noise (fraction of bar width)
+    Imax: 10,     // integral clamp
+    Kp: 3, Ki: 1.5, Kd: 0.2, v: 150
+  };
+  const history = [];   // {t, e, lost}
+  const trail = [];
+  let resets = 0;
+
+  function reset(countIt) {
+    const p0 = track[0], p1 = track[1];
+    Object.assign(S, {
+      x: p0.x, y: p0.y, th: Math.atan2(p1.y - p0.y, p1.x - p0.x),
+      wl: S.v, wr: S.v, cl: S.v, cr: S.v,
+      I: 0, ePrev: 0, e: 0, off: 0, lastSign: 1, tc: 0, t: 0,
+      idx: 0, prog: 0, laps: 0, lost: false,
+      sumAbs: 0, n: 0, bestProg: 0, stuckT: 0
+    });
+    history.length = 0; trail.length = 0;
+    if (countIt) resets++;
+  }
+
+  function nearest(px, py) {
+    let best = -1, bd = Infinity;
+    for (let k = -60; k <= 60; k++) {
+      const i = (S.idx + k + N) % N, q = track[i];
+      const d = (q.x - px) ** 2 + (q.y - py) ** 2;
+      if (d < bd) { bd = d; best = i; }
+    }
+    if (bd > 90 * 90) {
+      for (let i = 0; i < N; i++) {
+        const q = track[i], d = (q.x - px) ** 2 + (q.y - py) ** 2;
+        if (d < bd) { bd = d; best = i; }
+      }
+    }
+    return { i: best, d: Math.sqrt(bd) };
+  }
+
+  function control() {
+    const sx = S.x + S.look * Math.cos(S.th), sy = S.y + S.look * Math.sin(S.th);
+    const nr = nearest(sx, sy), q = track[nr.i];
+    const lx = Math.sin(S.th), ly = -Math.cos(S.th);          // left of heading (screen y points down)
+    const off = ((q.x - sx) * lx + (q.y - sy) * ly) / S.W;     // + = line is to the left
+    let e;
+    if (nr.d > S.W * 1.05) { S.lost = true; e = S.lastSign; }  // nothing under the bar: saturate
+    else {
+      S.lost = false;
+      e = Math.max(-1, Math.min(1, off + S.noise * (Math.random() * 2 - 1)));
+      if (Math.abs(e) > 0.05) S.lastSign = Math.sign(e);
+    }
+    S.I = Math.max(-S.Imax, Math.min(S.Imax, S.I + e * S.dtc));
+    const D = (e - S.ePrev) / S.dtc;
+    S.ePrev = e; S.e = e; S.off = Math.max(-1.5, Math.min(1.5, off));
+    const u = S.Kp * e + S.Ki * S.I + S.Kd * D;
+    S.cl = Math.max(-S.vmax, Math.min(S.vmax, S.v * (1 - u)));
+    S.cr = Math.max(-S.vmax, Math.min(S.vmax, S.v * (1 + u)));
+    S.sumAbs += Math.min(1, Math.abs(off)); S.n++;
+    history.push({ t: S.t, e: Math.max(-1, Math.min(1, off)), lost: S.lost });
+  }
+
+  function physics(dt) {
+    const a = dt / S.tau;
+    S.wl += (S.cl - S.wl) * a; S.wr += (S.cr - S.wr) * a;
+    const v = (S.wl + S.wr) / 2, w = (S.wl - S.wr) / S.L;
+    S.th += w * dt; S.x += v * Math.cos(S.th) * dt; S.y += v * Math.sin(S.th) * dt;
+  }
+
+  function step(T) {
+    let rem = T;
+    while (rem > 1e-9) {
+      const dt = Math.min(S.dtp, rem);
+      S.tc -= dt; if (S.tc <= 0) { control(); S.tc += S.dtc; }
+      physics(dt); S.t += dt; rem -= dt;
+
+      const nr = nearest(S.x, S.y);
+      let di = nr.i - S.idx; if (di > N / 2) di -= N; if (di < -N / 2) di += N;
+      S.prog += di; S.idx = nr.i;
+      if (S.prog >= N) { S.prog -= N; S.laps++; S.bestProg -= N; }
+      // Progress watchdog: off the track, or circling without getting anywhere
+      if (S.prog > S.bestProg + 15) { S.bestProg = S.prog; S.stuckT = 0; } else S.stuckT += dt;
+      if (nr.d > 120 || S.stuckT > 5) { reset(true); return; }
+    }
+  }
+
+  // ---- Drawing ----
+  function fitCanvas(c, w, h) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const cw = c.clientWidth || w;
+    const ch = c === canvas ? cw * WORLD_H / WORLD_W : (c.clientHeight || h);
+    if (c.width !== Math.round(cw * dpr) || c.height !== Math.round(ch * dpr)) {
+      c.width = Math.round(cw * dpr); c.height = Math.round(ch * dpr);
+    }
+    return { cw, ch, dpr };
+  }
+
+  function drawTrack() {
+    const { cw, dpr } = fitCanvas(canvas, WORLD_W, WORLD_H);
+    const k = cw / WORLD_W * dpr;
+    ctx.setTransform(k, 0, 0, k, 0, 0);
+    ctx.fillStyle = '#fafaf7'; ctx.fillRect(0, 0, WORLD_W, WORLD_H);
+
+    // the taped line
+    ctx.beginPath();
+    track.forEach((p, i) => i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y));
+    ctx.closePath();
+    ctx.lineWidth = 7; ctx.strokeStyle = '#4b5563'; ctx.lineJoin = 'round'; ctx.stroke();
+
+    // start/finish mark
+    const p0 = track[0], p1 = track[1];
+    const a = Math.atan2(p1.y - p0.y, p1.x - p0.x);
+    ctx.save(); ctx.translate(p0.x, p0.y); ctx.rotate(a);
+    ctx.fillStyle = '#10b981'; ctx.fillRect(-2, -16, 4, 32);
+    ctx.restore();
+
+    // trail
+    for (let i = 1; i < trail.length; i++) {
+      const alpha = i / trail.length;
+      ctx.strokeStyle = `rgba(249,115,22,${0.1 + 0.85 * alpha})`;   // path of the wheel axle
+      ctx.lineWidth = 2.5;
+      ctx.beginPath(); ctx.moveTo(trail[i - 1].x, trail[i - 1].y); ctx.lineTo(trail[i].x, trail[i].y); ctx.stroke();
+    }
+
+    // robot
+    ctx.save(); ctx.translate(S.x, S.y); ctx.rotate(S.th);
+    ctx.fillStyle = '#111827';                                   // wheels
+    ctx.fillRect(-8, -S.L / 2 - 4, 16, 6); ctx.fillRect(-8, S.L / 2 - 2, 16, 6);
+    ctx.fillStyle = '#e5e7eb'; ctx.strokeStyle = '#374151'; ctx.lineWidth = 1.5;
+    roundRect(-14, -S.L / 2 + 2, 42, S.L - 4, 6); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = '#374151'; ctx.lineWidth = 2;               // arm to the sensor bar
+    ctx.beginPath(); ctx.moveTo(18, 0); ctx.lineTo(S.look, 0); ctx.stroke();
+    ctx.fillStyle = S.lost ? '#ef4444' : '#f59e0b';               // IR sensor bar
+    roundRect(S.look - 2, -S.W, 4, 2 * S.W, 2); ctx.fill();
+    ctx.fillStyle = '#2563eb';                                    // ultrasonic "eyes"
+    ctx.beginPath(); ctx.arc(26, -6, 2.6, 0, 7); ctx.arc(26, 6, 2.6, 0, 7); ctx.fill();
+    ctx.restore();
+  }
+
+  function roundRect(x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+
+  function drawPlot() {
+    const { cw, ch, dpr } = fitCanvas(plot, 700, 110);
+    pctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    pctx.clearRect(0, 0, cw, ch);
+    const span = 8, t1 = S.t, t0 = t1 - span;
+    const X = t => (t - t0) / span * cw, Y = e => ch / 2 - e * (ch / 2 - 8);
+
+    // line-lost shading
+    pctx.fillStyle = 'rgba(239,68,68,0.12)';
+    for (const h of history) if (h.lost && h.t >= t0) pctx.fillRect(X(h.t) - 1, 0, Math.max(2, cw / (span / S.dtc)) + 1, ch);
+
+    // grid
+    pctx.strokeStyle = '#e5e7eb'; pctx.lineWidth = 1;
+    pctx.beginPath(); pctx.moveTo(0, Y(1)); pctx.lineTo(cw, Y(1)); pctx.moveTo(0, Y(-1)); pctx.lineTo(cw, Y(-1)); pctx.stroke();
+    pctx.strokeStyle = '#9ca3af';
+    pctx.beginPath(); pctx.moveTo(0, Y(0)); pctx.lineTo(cw, Y(0)); pctx.stroke();
+    pctx.fillStyle = '#6b7280'; pctx.font = '11px system-ui, sans-serif';
+    pctx.fillText('left', 6, Y(1) + 12); pctx.fillText('right', 6, Y(-1) - 4);
+
+    // error trace
+    pctx.strokeStyle = '#2563eb'; pctx.lineWidth = 1.8;
+    pctx.beginPath();
+    let first = true;
+    for (const h of history) {
+      if (h.t < t0) continue;
+      const x = X(h.t), y = Y(h.e);
+      if (first) { pctx.moveTo(x, y); first = false; } else pctx.lineTo(x, y);
+    }
+    pctx.stroke();
+  }
+
+  // ---- Controls ----
+  const sliders = { kp: 'Kp', ki: 'Ki', kd: 'Kd', spd: 'v' };
+  const presetButtons = document.querySelectorAll('.presets button');
+  function syncOutputs() {
+    for (const id in sliders) {
+      const el = document.getElementById(id);
+      document.getElementById(id + '-out').textContent = id === 'spd' ? el.value : Number(el.value).toFixed(2);
+    }
+  }
+  for (const id in sliders) {
+    document.getElementById(id).addEventListener('input', e => {
+      S[sliders[id]] = Number(e.target.value);
+      syncOutputs();
+      presetButtons.forEach(b => b.setAttribute('aria-pressed', 'false'));
+    });
+  }
+  presetButtons.forEach(btn => {
+    btn.setAttribute('aria-pressed', 'false');
+    btn.addEventListener('click', () => {
+      [['kp', 'kp'], ['ki', 'ki'], ['kd', 'kd']].forEach(([id, key]) => {
+        const v = Number(btn.dataset[key]);
+        document.getElementById(id).value = v; S[sliders[id]] = v;
+      });
+      syncOutputs();
+      presetButtons.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+      resets = 0; reset(false);
+    });
+  });
+  // the default slider values match the PID preset
+  presetButtons[4].setAttribute('aria-pressed', 'true');
+
+  let running = true;
+  const pauseBtn = document.getElementById('pause');
+  pauseBtn.addEventListener('click', () => {
+    running = !running;
+    pauseBtn.textContent = running ? 'Pause' : 'Play';
+  });
+  document.getElementById('restart').addEventListener('click', () => { resets = 0; reset(false); });
+
+  // Only animate while the simulator is on screen
+  let visible = true;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => { visible = entries[0].isIntersecting; })
+      .observe(document.getElementById('sim'));
+  }
+
+  // ---- Main loop ----
+  const elErr = document.getElementById('st-err'), elLaps = document.getElementById('st-laps'), elRes = document.getElementById('st-resets');
+  let last = performance.now(), statTimer = 0;
+  function frame(now) {
+    const dt = Math.min(0.05, (now - last) / 1000); last = now;
+    if (running && visible) {
+      step(dt);
+      trail.push({ x: S.x, y: S.y }); if (trail.length > 220) trail.shift();
+      while (history.length && history[0].t < S.t - 8.5) history.shift();
+    }
+    if (visible) {
+      drawTrack(); drawPlot();
+      statTimer += dt;
+      if (statTimer > 0.25) {
+        statTimer = 0;
+        elErr.textContent = S.n ? (S.sumAbs / S.n).toFixed(2) : '0.00';
+        elLaps.textContent = S.laps;
+        elRes.textContent = resets;
+        badge.textContent = S.lost ? 'Line lost' : 'On the line';
+        badge.classList.toggle('lost', S.lost);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  syncOutputs();
+  reset(false);
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
