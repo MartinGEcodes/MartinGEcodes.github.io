@@ -127,6 +127,74 @@
       margin-bottom: 18px;
     }
 
+    /* Name + download button row */
+    .cv-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 20px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(30,107,184,0.35);
+      transition: background 0.15s ease, transform 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .download-btn:hover {
+      background: #17599b;
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    .download-btn svg {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .download-meta {
+      display: block;
+      font-size: 12px;
+      color: #777;
+      margin-top: 6px;
+      text-align: right;
+    }
+
+    /* CV entries: title + dates on one line, organisation + place below (as in the PDF) */
+    .entry { margin-bottom: 14px; }
+
+    .entry-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .entry-row.sub {
+      font-style: italic;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .entry-row span:last-child {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .entry ul { margin-top: 4px; }
+
     /* ---------- FOOTER (optional, matches landing) ---------- */
     .site-footer {
       max-width: 960px;
@@ -143,6 +211,9 @@
         margin: 16px;
         padding: 24px 20px 28px;
       }
+      .download-meta { text-align: left; }
+      .entry-row { flex-direction: column; gap: 0; }
+      .entry-row span:last-child { text-align: left; white-space: normal; }
       .site-header {
         flex-direction: column;
         align-items: flex-start;
@@ -165,12 +236,25 @@
     </nav>
   </header>
 
-  <!-- CV CARD -->
+  <!-- CV CARD (content matches Martin_Gregory-Eaves_CV.pdf) -->
   <main id="cv" class="content-wrapper">
-    <h1>Martin Gregory-Eaves</h1>
-    <p class="cv-contact">
-      (+48) 500 484 111 | martin.gregory-eaves@tum.de | 18/02/05 | martingecodes.github.io
-    </p>
+    <div class="cv-top">
+      <div>
+        <h1>Martin Gregory-Eaves</h1>
+        <p class="cv-contact">
+          (+48) 500 484 111 | martin.gregory-eaves@tum.de | 18/02/05 | martingecodes.github.io
+        </p>
+      </div>
+      <div>
+        <a class="download-btn" href="/Users/martingregory-eaves/Documents/GitHub/MartinGEcodes.github.io/pdfs/Martin_Gregory-Eaves_CV.pdf" download="Martin_Gregory-Eaves_CV.pdf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/>
+          </svg>
+          Download CV (PDF)
+        </a>
+        <span class="download-meta">1 page · updated October 2026</span>
+      </div>
+    </div>
 
     <h2>Summary</h2>
     <p>I am an aspiring roboticist and a thorough science enjoyer. I graduated with a BSc in Applied Physics from the
@@ -182,55 +266,72 @@
         Spanish and enjoy playing club football, bouldering, running and reading.</p>
 
     <h2>Relevant Experience</h2>
-    <p><strong>Bachelor Thesis &amp; Research Student</strong> — Lentink Lab, University of Groningen, Groningen, Netherlands (Feb. 2026 – July 2026)</p>
-    <ul>
+
+    <div class="entry">
+      <div class="entry-row"><span><strong>Bachelor Thesis &amp; Research Student</strong></span><span>Feb. 2026 – July 2026</span></div>
+      <div class="entry-row sub"><span>Lentink Lab, University of Groningen</span><span>Groningen, Netherlands</span></div>
+      <ul>
         <li>Thesis: <em>An Investigation into Gust Mitigation Strategies for Small Fixed-Wing Aerial Vehicles</em>.</li>
         <li>Designed and 3D-printed a bird-inspired airfoil with 11 embedded pressure sensors read by a Teensy 4.1.</li>
         <li>Ran wind-tunnel tests showing the sensor array detects lift and distinguishes turbulence types.</li>
-    </ul>
+      </ul>
+    </div>
 
-    <p><strong>Research Assistant</strong> — DAISY Lab, Groningen, Netherlands (Nov. 2024 – Jan. 2026)</p>
-    <ul>
+    <div class="entry">
+      <div class="entry-row"><span><strong>Research Assistant</strong></span><span>Nov. 2024 – Jan. 2026</span></div>
+      <div class="entry-row sub"><span>DAISY Lab</span><span>Groningen, Netherlands</span></div>
+      <ul>
         <li>Created and analyzed vibrating models in DDS Abaqus using different Python scripting techniques.</li>
         <li>Designed experimental apparatus for testing robot maneuverability.</li>
-        <li>Helped with swarm robot detection architecture.</li>
-    </ul>
+      </ul>
+    </div>
 
-    <p><strong>Mechatronics Engineer Intern</strong> — Aspect Biosystems, Vancouver, BC, Canada (July 2025 – Aug. 2025, 8 week internship)</p>
-    <ul>
+    <div class="entry">
+      <div class="entry-row"><span><strong>Mechatronics Engineer Intern</strong></span><span>July 2025 – Aug. 2025 (8 week internship)</span></div>
+      <div class="entry-row sub"><span>Aspect Biosystems, aspectbiosystems.com</span><span>Vancouver, BC, Canada</span></div>
+      <ul>
         <li>Created SolidWorks CAD prototypes and engineering drawings with GD&amp;T (Geometric Dimensioning &amp; Tolerancing).</li>
         <li>SolidWorks PDM (Product Data Management) &amp; R&amp;D lab + clean room exposure.</li>
         <li>Recreated experiments seen in modern literature aimed to improve product quality.</li>
-    </ul>
+      </ul>
+    </div>
 
-    <p><strong>Member of Engineering Team</strong> — Cybanorth, Groningen, Netherlands (Feb. 2023 – Nov. 2024)</p>
-    <ul>
+    <div class="entry">
+      <div class="entry-row"><span><strong>Member of Engineering Team</strong></span><span>Feb. 2023 – Nov. 2024</span></div>
+      <div class="entry-row sub"><span>Cybanorth</span><span>Groningen, Netherlands</span></div>
+      <ul>
         <li>Edited the Arduino IDE code that improved hand contraction and allowed for individual finger actuation.</li>
         <li>Tasked with R&amp;D for the finger actuating mechanism.</li>
-        <li>Soldered and wired electrical components for the mechanical hand prosthesis.</li>
-        <li>Funded trip to ETH Zurich.</li>
-    </ul>
+        <li>Soldered and wired electrical components for the mechanical hand prosthesis. Funded trip to ETH Zurich.</li>
+      </ul>
+    </div>
 
-    <p><strong>Research and Design Lab Assistant Intern</strong> — Barberan, Barcelona, Spain (June 2024 – July 2024, 5 week internship)</p>
-    <ul>
+    <div class="entry">
+      <div class="entry-row"><span><strong>Research and Design Lab Assistant Intern</strong></span><span>June 2024 – July 2024 (5 week internship)</span></div>
+      <div class="entry-row sub"><span>Barberan, barberan.com</span><span>Barcelona, Spain</span></div>
+      <ul>
         <li>Assisted with developing wave functions for a piezoelectric nozzle actuator.</li>
         <li>Took part in the manufacturing of industrial printers.</li>
         <li>Produced documentation with nozzle head analysis.</li>
-    </ul>
+      </ul>
+    </div>
 
     <h2>Education</h2>
-    <p>MSc Mechatronics, Robotics, and Biomechanical Engineering — Technical University of Munich, Munich, Germany (Oct. 2026 – present)</p>
-    <p>BSc Applied Physics — University of Groningen, Groningen, Netherlands (Sep. 2023 – June 2026)</p>
-    <p>IBDP + IGCSE — British School of Barcelona, Castelldefels, Spain (Sep. 2019 – May 2023)</p>
 
-    <h2>Projects</h2>
-    <p>Electromagnetic Generator — LaTeX, Fusion 360, Python (May–June 2024)</p>
-    <ul>
-        <li>Part of a 4-student team that designed and manufactured an electromagnetic generator using 3D printed parts and metal wire.</li>
-        <li>Created plots of the results in Python.</li>
-        <li>Applied the principles of electromagnetic induction to a physical model.</li>
-        <li>Presented at the RUG Symposium.</li>
-    </ul>
+    <div class="entry">
+      <div class="entry-row"><span><strong>Technical University of Munich</strong></span><span>Munich, Germany</span></div>
+      <div class="entry-row sub"><span>Master of Science in Mechatronics, Robotics, and Biomechanical Engineering</span><span>Oct. 2026 – present</span></div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-row"><span><strong>University of Groningen</strong></span><span>Groningen, Netherlands</span></div>
+      <div class="entry-row sub"><span>Bachelor of Science in Applied Physics</span><span>Sep. 2023 – June 2026</span></div>
+    </div>
+
+    <div class="entry">
+      <div class="entry-row"><span><strong>British School of Barcelona</strong></span><span>Castelldefels, Spain</span></div>
+      <div class="entry-row sub"><span>IBDP + IGCSE</span><span>Sep. 2019 – May 2023</span></div>
+    </div>
 
     <h2>Technical Skills</h2>
     <p><strong>Languages/Services:</strong> SolidWorks, Autodesk Inventor, Python, C/C++, Arduino IDE, LaTeX, PowerPoint, Word, Excel, Fusion 360.</p>
