@@ -104,6 +104,13 @@
       color: #222;
     }
 
+    /* Section headings inside the CV card get the rule underneath, as in the PDF */
+    #cv h2 {
+      border-bottom: 1px solid #222;
+      padding-bottom: 3px;
+      margin: 26px 0 10px;
+    }
+
     p {
       line-height: 1.7;
       font-size: 15px;
@@ -126,6 +133,22 @@
       color: #555;
       margin-bottom: 18px;
     }
+
+    .cv-contact .sep {
+      margin: 0 6px;
+      color: #999;
+    }
+
+    .cv-contact {
+      display: flex;
+      flex-wrap: wrap;
+      row-gap: 2px;
+    }
+
+    .cv-contact .ci { white-space: nowrap; }
+
+    .cv-top > div:first-child { flex: 1 1 420px; min-width: 0; }
+    .cv-top > div:last-child { flex: 0 0 auto; }
 
     /* Name + download button row */
     .cv-top {
@@ -171,29 +194,60 @@
       text-align: right;
     }
 
-    /* CV entries: title + dates on one line, organisation + place below (as in the PDF) */
+    /* CV entries, laid out as in the PDF:
+       line 1: dates | place
+       line 2: TITLE  Organisation
+       then bullets */
     .entry { margin-bottom: 14px; }
 
-    .entry-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      font-size: 15px;
+    .entry-meta {
+      font-size: 13px;
+      color: #555;
       line-height: 1.5;
     }
 
-    .entry-row.sub {
-      font-style: italic;
-      font-size: 14px;
-      color: #555;
+    .entry-meta .sep {
+      margin: 0 6px;
+      color: #999;
     }
 
-    .entry-row span:last-child {
-      text-align: right;
-      white-space: nowrap;
+    .entry-head {
+      font-size: 15px;
+      line-height: 1.5;
+      color: #222;
+    }
+
+    .entry-title {
+      font-weight: 700;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      margin-right: 8px;
     }
 
     .entry ul { margin-top: 4px; }
+
+    .entry li { font-size: 15px; }
+
+    /* Skills: label column + values column, as in the PDF */
+    .skills {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 4px 16px;
+      margin: 0 0 10px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .skills dt {
+      font-weight: 700;
+      color: #222;
+    }
+
+    .skills dd {
+      margin: 0;
+      color: #333;
+    }
 
     /* ---------- FOOTER (optional, matches landing) ---------- */
     .site-footer {
@@ -212,8 +266,9 @@
         padding: 24px 20px 28px;
       }
       .download-meta { text-align: left; }
-      .entry-row { flex-direction: column; gap: 0; }
-      .entry-row span:last-child { text-align: left; white-space: normal; }
+      .entry-title { display: block; margin-right: 0; }
+      .skills { grid-template-columns: 1fr; gap: 0; }
+      .skills dd { margin-bottom: 8px; }
       .site-header {
         flex-direction: column;
         align-items: flex-start;
@@ -242,73 +297,107 @@
       <div>
         <h1>Martin Gregory-Eaves</h1>
         <p class="cv-contact">
-          (+48) 500 484 111 | martin.gregory-eaves@tum.de | 18/02/05 | martingecodes.github.io
+          <span class="ci">Munich, Germany<span class="sep">|</span></span><span class="ci"><a href="mailto:martin.gregory-eaves@tum.de">martin.gregory-eaves@tum.de</a><span class="sep">|</span></span><span class="ci"><a href="tel:+48500484111">+48 500 484 111</a><span class="sep">|</span></span><span class="ci"><a href="https://martingecodes.github.io">martingecodes.github.io</a><span class="sep">|</span></span><span class="ci"><a href="https://linkedin.com/in/martin-ge" target="_blank" rel="noopener">linkedin.com/in/martin-ge</a><span class="sep">|</span></span><span class="ci">18/02/05</span>
         </p>
       </div>
       <div>
-        <a class="download-btn" href="/Users/martingregory-eaves/Documents/GitHub/MartinGEcodes.github.io/pdfs/Martin_Gregory-Eaves_CV.pdf" download="Martin_Gregory-Eaves_CV.pdf">
+        <a class="download-btn" href="pdfs/Martin_Gregory-Eaves_CV.pdf" download="Martin_Gregory-Eaves_CV.pdf">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/>
           </svg>
           Download CV (PDF)
         </a>
-        <span class="download-meta">1 page · updated October 2026</span>
+        <span class="download-meta">2 pages · updated October 2026</span>
       </div>
     </div>
 
-    <h2>Summary</h2>
-    <p>I am an aspiring roboticist and a thorough science enjoyer. I graduated with a BSc in Applied Physics from the
-        University of Groningen in 2026 and am now pursuing an MSc in Mechatronics, Robotics, and Biomechanical
-        Engineering at the Technical University of Munich. My bachelor thesis project focused on implementing an array
-        of pressure sensors into a bird-inspired airfoil to help with gust mitigation and phase-advanced flight control.
-        I also have experience with coding in Python and C/C++ and vibrational analysis that I gained as a research
-        assistant in the Distributed Autonomous Intelligent Systems (DAISY) lab. I am fluent in English, Polish, and
-        Spanish and enjoy playing club football, bouldering, running and reading.</p>
+    <!-- ===== PROFILE ===== -->
+    <h2>Profile</h2>
+    <p>MSc MRBE at TUM with a engineering research background spanning embedded systems, control theory, and
+      aerodynamics. My interests in swarm control of miniaturized robots and flight control stem from two the research
+      projects I was a part of and amounted to 25 ECTS of credits. My previous training comes from a applied physics BSc
+      from which I gained fundamental knowledge in linear algebra, real analysis, signal processing and thermodynamics.</p>
 
-    <h2>Relevant Experience</h2>
+    <!-- ===== EDUCATION ===== -->
+    <h2>Education</h2>
 
     <div class="entry">
-      <div class="entry-row"><span><strong>Bachelor Thesis &amp; Research Student</strong></span><span>Feb. 2026 – July 2026</span></div>
-      <div class="entry-row sub"><span>Lentink Lab, University of Groningen</span><span>Groningen, Netherlands</span></div>
+      <div class="entry-meta">Oct 2026 – Present<span class="sep">|</span>Munich, Germany</div>
+      <div class="entry-head"><span class="entry-title">MSc Mechatronics, Robotics &amp; Biomechanical Engineering (MRBE)</span><span class="entry-org">Technical University of Munich</span></div>
       <ul>
-        <li>Thesis: <em>An Investigation into Gust Mitigation Strategies for Small Fixed-Wing Aerial Vehicles</em>.</li>
-        <li>Designed and 3D-printed a bird-inspired airfoil with 11 embedded pressure sensors read by a Teensy 4.1.</li>
-        <li>Ran wind-tunnel tests showing the sensor array detects lift and distinguishes turbulence types.</li>
+        <li>Key courses: Machine Learning &amp; Optimization, Robotics, Advanced Programming in C++, Autonomous Vehicles:
+          Development and Simulation, Advanced Control, Embedded Systems &amp; Security, Computational Neuroscience.</li>
       </ul>
     </div>
 
     <div class="entry">
-      <div class="entry-row"><span><strong>Research Assistant</strong></span><span>Nov. 2024 – Jan. 2026</span></div>
-      <div class="entry-row sub"><span>DAISY Lab</span><span>Groningen, Netherlands</span></div>
+      <div class="entry-meta">Sep 2023 – Jun 2026<span class="sep">|</span>Groningen, Netherlands</div>
+      <div class="entry-head"><span class="entry-title">BSc Applied Physics</span><span class="entry-org">University of Groningen</span></div>
       <ul>
-        <li>Created and analyzed vibrating models in DDS Abaqus using different Python scripting techniques.</li>
-        <li>Designed experimental apparatus for testing robot maneuverability.</li>
+        <li>Extra course (5 ECTS): Mechatronics.</li>
+        <li>Thesis (15 ECTS): &ldquo;An Investigation into Gust Mitigation Strategies for Small Fixed-Wing Aerial Vehicles&rdquo; - Lentink Lab.</li>
+        <li>Research project (10 ECTS): &ldquo;Experimental Modal Analysis in a Swarm of Miniaturized Vibration-Sensing Robots&rdquo; - DAISY Lab.</li>
+        <li><strong>Leadership:</strong> Led the Cybathlon thumb actuation team. Tutored IB math and physics 10 hours/ week. Raised £350
+          for charity running the London Landmarks Half Marathon</li>
       </ul>
     </div>
 
     <div class="entry">
-      <div class="entry-row"><span><strong>Mechatronics Engineer Intern</strong></span><span>July 2025 – Aug. 2025 (8 week internship)</span></div>
-      <div class="entry-row sub"><span>Aspect Biosystems, aspectbiosystems.com</span><span>Vancouver, BC, Canada</span></div>
+      <div class="entry-meta">Sep 2019 – May 2023<span class="sep">|</span>Castelldefels, Spain</div>
+      <div class="entry-head"><span class="entry-title">IBDP + IGCSE</span><span class="entry-org">British School of Barcelona</span></div>
+    </div>
+
+    <!-- ===== WORK EXPERIENCE ===== -->
+    <h2>Work Experience</h2>
+
+    <div class="entry">
+      <div class="entry-meta">Mar 2025 – Sep 2025<span class="sep">|</span>Groningen, Netherlands</div>
+      <div class="entry-head"><span class="entry-title">Undergraduate Research Assistant</span><span class="entry-org">DAISY Lab</span></div>
       <ul>
-        <li>Created SolidWorks CAD prototypes and engineering drawings with GD&amp;T (Geometric Dimensioning &amp; Tolerancing).</li>
-        <li>SolidWorks PDM (Product Data Management) &amp; R&amp;D lab + clean room exposure.</li>
-        <li>Recreated experiments seen in modern literature aimed to improve product quality.</li>
+        <li>Automated FEM modal analysis of sheet-metal panels in Abaqus using Python scripts, comparing vibration response
+          across sensor configurations and structural defects.</li>
+        <li>Designed and 3D-printed a robot enclosure and custom sensor mount in Fusion 360 for experimental vibration
+          testing.</li>
+        <li>Processed experimental data in Python using FFT and power spectral density analysis to validate simulation results.</li>
+        <li>Reviewed literature on kriging interpolation as a search algorithm for defect localisation.</li>
       </ul>
     </div>
 
     <div class="entry">
-      <div class="entry-row"><span><strong>Member of Engineering Team</strong></span><span>Feb. 2023 – Nov. 2024</span></div>
-      <div class="entry-row sub"><span>Cybanorth</span><span>Groningen, Netherlands</span></div>
+      <div class="entry-meta">Jul 2025 – Aug 2025<span class="sep">|</span>Vancouver, Canada</div>
+      <div class="entry-head"><span class="entry-title">Mechatronics Engineering Intern</span><span class="entry-org">Aspect Biosystems</span></div>
       <ul>
-        <li>Edited the Arduino IDE code that improved hand contraction and allowed for individual finger actuation.</li>
-        <li>Tasked with R&amp;D for the finger actuating mechanism.</li>
-        <li>Soldered and wired electrical components for the mechanical hand prosthesis. Funded trip to ETH Zurich.</li>
+        <li>Used CAD to redesign and improve alignment accuracy of silicone sheet bonding apparatus.</li>
+        <li>Created engineering drawings with accurate GD&amp;T approved by in-house machine shop.</li>
+        <li>Collaborated on various engineering assemblies and parts through Solidworks PDM.</li>
       </ul>
     </div>
 
     <div class="entry">
-      <div class="entry-row"><span><strong>Research and Design Lab Assistant Intern</strong></span><span>June 2024 – July 2024 (5 week internship)</span></div>
-      <div class="entry-row sub"><span>Barberan, barberan.com</span><span>Barcelona, Spain</span></div>
+      <div class="entry-meta">Nov 2024 – Mar 2025<span class="sep">|</span>Groningen, Netherlands</div>
+      <div class="entry-head"><span class="entry-title">Thumb Actuation Engineer</span><span class="entry-org">Cybathlon</span></div>
+      <ul>
+        <li>Designed a component of the thumb actuation system using CAD to enable reliable grasping of objects with varying
+          geometries.</li>
+        <li>Integrated Hall-effect sensors into the thumb joint to enable real-time joint angle measurement and support object
+          detection.</li>
+        <li>Selected as one of six on-site engineers to provide technical support at the ETH Cybathlon 2024.</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-meta">Apr 2026 – Jun 2026<span class="sep">|</span>Groningen, Netherlands</div>
+      <div class="entry-head"><span class="entry-title">University Teaching Assistant</span><span class="entry-org">University of Groningen</span></div>
+      <ul>
+        <li>Oversaw groups of 4-5 students participating in their 1st year lab design course.</li>
+        <li>Provided constructive feedback in in-person meetings and graded draft and final lab reports.</li>
+        <li>Gave advice on project management and self-organization to younger students.</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-meta">Jun 2024 – Jul 2024 (5 week internship)<span class="sep">|</span>Barcelona, Spain</div>
+      <div class="entry-head"><span class="entry-title">Research and Design Lab Assistant Intern</span><span class="entry-org">Barberan, <a href="https://barberan.com" target="_blank" rel="noopener">barberan.com</a></span></div>
       <ul>
         <li>Assisted with developing wave functions for a piezoelectric nozzle actuator.</li>
         <li>Took part in the manufacturing of industrial printers.</li>
@@ -316,27 +405,51 @@
       </ul>
     </div>
 
-    <h2>Education</h2>
+    <!-- ===== PROJECTS ===== -->
+    <h2>Projects</h2>
 
     <div class="entry">
-      <div class="entry-row"><span><strong>Technical University of Munich</strong></span><span>Munich, Germany</span></div>
-      <div class="entry-row sub"><span>Master of Science in Mechatronics, Robotics, and Biomechanical Engineering</span><span>Oct. 2026 – present</span></div>
+      <div class="entry-meta">2026<span class="sep">|</span>University of Groningen</div>
+      <div class="entry-head"><span class="entry-title">Bird-Inspired Pressure-Sensing Wing</span><span class="entry-org">BSc Thesis, Lentink Lab</span></div>
+      <ul>
+        <li>Embedded 11 BMP280 pressure sensors in a 3D-printed Eppler 423 wing to detect incoming gusts.</li>
+        <li>Wrote C++ firmware in the Arduino IDE for a Teensy 4.1, reading all sensors over SPI.</li>
+        <li>Wind-tunnel tested under pulsing and shear turbulence; distinguished steady from turbulent flow.</li>
+        <li><strong>Tools:</strong> C++, Arduino IDE, Teensy 4.1, SPI, BMP280, SolidWorks, KiCad.</li>
+      </ul>
     </div>
 
     <div class="entry">
-      <div class="entry-row"><span><strong>University of Groningen</strong></span><span>Groningen, Netherlands</span></div>
-      <div class="entry-row sub"><span>Bachelor of Science in Applied Physics</span><span>Sep. 2023 – June 2026</span></div>
+      <div class="entry-head"><span class="entry-title">Line-Following Rover</span></div>
+      <ul>
+        <li>Coded a PID algorithm so a pre-built RC car follows a black line and avoids obstacles.</li>
+        <li><strong>Tools:</strong> PID control, infrared and sonar sensors.</li>
+      </ul>
     </div>
 
-    <div class="entry">
-      <div class="entry-row"><span><strong>British School of Barcelona</strong></span><span>Castelldefels, Spain</span></div>
-      <div class="entry-row sub"><span>IBDP + IGCSE</span><span>Sep. 2019 – May 2023</span></div>
-    </div>
+    <!-- ===== SKILLS ===== -->
+    <h2>Skills</h2>
+    <dl class="skills">
+      <dt>Programming</dt>
+      <dd>C++, Python, C, Office 365, Matplotlib, Numpy, Pandas</dd>
 
-    <h2>Technical Skills</h2>
-    <p><strong>Languages/Services:</strong> SolidWorks, Autodesk Inventor, Python, C/C++, Arduino IDE, LaTeX, PowerPoint, Word, Excel, Fusion 360.</p>
-    <p><strong>Developer Tools:</strong> Google Colab, Visual Studio Code, Overleaf, Wolfram Mathematica.</p>
-    <p><strong>Libraries:</strong> NumPy, Matplotlib.</p>
+      <dt>Hardware</dt>
+      <dd>Teensy 4.1, Arduino IDE, SPI / I<sup>2</sup>C, pressure and Hall-effect sensors, soldering</dd>
+
+      <dt>CAD &amp; Simulation</dt>
+      <dd>SolidWorks, Fusion 360, Abaqus, KiCad, 3D printing</dd>
+
+      <dt>Languages</dt>
+      <dd>English (native), Polish (native), Spanish (C1–C2)</dd>
+
+      <dt>Other Tools</dt>
+      <dd>Autodesk Inventor, LaTeX, Overleaf, Google Colab, Visual Studio Code, Wolfram Mathematica</dd>
+    </dl>
+
+    <!-- ===== INTERESTS & HOBBIES ===== -->
+    <h2>Interests &amp; Hobbies</h2>
+    <p>I am a big FC Barcelona fan and grew up playing football in school and at university. Recently I have taken up long
+      distance running and bouldering. I also enjoy playing the guitar and reading both fiction and non-fiction.</p>
   </main>
 
   <!-- EXTRA NOTES AS SECOND CARD -->
