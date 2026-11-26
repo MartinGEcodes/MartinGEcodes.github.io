@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CybaNorth Robotic Prosthetic Hand | Martin Gregory-Eaves</title>
+  <meta name="description" content="My work leading thumb actuation for CybaNorth, the University of Groningen student team that built a prosthetic hand for CYBATHLON 2024.">
+  <link rel="stylesheet" href="project-detail.css">
+</head>
+<body>
+  <main>
+    <nav class="back" aria-label="Project navigation"><a href="projetcts.html">← Back to projects</a></nav>
+    <header>
+      <p class="eyebrow">University of Groningen · CYBATHLON 2024</p>
+      <h1>CybaNorth’s robotic prosthetic hand</h1>
+      <p class="subtitle">I led the thumb actuation team for CybaNorth, a student robotics team building a prosthetic hand for our pilot, Bert.</p>
+      <div class="tags"><span>Prosthetics</span><span>Fusion 360</span><span>Arduino IDE</span><span>Electronics</span></div>
+    </header>
+
+    <section class="intro">
+      <div>
+        <h2>Designing for Bert’s grip</h2>
+        <p>Our goal was to design and manufacture a hand that Bert, who has a limb amputation, could use to grasp everyday objects. The thumb posed a particular challenge. A pinch needs the thumb to meet a fingertip, while a wider grip needs it to press an object against the fingers.</p>
+        <p>For my team, the biomechanics of those grips determined where the thumb needed to sit and how it needed to move.</p>
+      </div>
+      <figure>
+        <a href="images/cybanorth-hand.webp"><img src="images/cybanorth-hand.webp" width="666" height="1184" alt="Hand prototype with an orange palm housing, two upright articulated fingers and an extended thumb."></a>
+        <figcaption>The hand prototype with its thumb extended.</figcaption>
+      </figure>
+    </section>
+
+    <h2>Motor, mechanism and feedback</h2>
+    <p>I was responsible for motor selection and the mechanical design of the thumb actuation mechanism. In Fusion 360, I designed a component that positioned the thumb for grasping objects of different shapes. I also integrated Hall-effect sensors into the thumb joint so we could measure its angle as it moved.</p>
+    <p>I used the Arduino IDE to work on the control electronics during prototyping. With angle feedback, we could compare the movement we commanded with the movement the joint actually made.</p>
+    <div class="grid-2 prototypes">
+      <figure>
+        <a href="images/cybanorth-joint.webp"><img src="images/cybanorth-joint.webp" width="666" height="1184" loading="lazy" alt="Close-up of an articulated metal linkage with pivot bolts and wires on the workbench."></a>
+        <figcaption>An exposed linkage during prototyping.</figcaption>
+      </figure>
+      <figure>
+        <a href="images/cybanorth-glove.webp"><img src="images/cybanorth-glove.webp" width="666" height="1184" loading="lazy" alt="Blue-covered prosthetic hand mounted upright on its socket, with the thumb extended sideways."></a>
+        <figcaption>The covered hand and socket on the lab bench.</figcaption>
+      </figure>
+    </div>
+
+    <h2>Taking the hand to Zürich</h2>
+    <p>Our team qualified for the 2024 CYBATHLON and secured university funding to attend the event at ETH Zürich with Bert. I was one of six engineers selected to provide technical support on site.</p>
+    <div class="grid-2 event-photos">
+      <figure>
+        <a href="images/cybanorth-zurich.webp"><img src="images/cybanorth-zurich.webp" width="1024" height="768" loading="lazy" alt="CybaNorth team members posing in front of the blue CYBATHLON backdrop at ETH Zürich."></a>
+        <figcaption>Our team at the 2024 CYBATHLON.</figcaption>
+      </figure>
+      <figure>
+        <a href="images/CybaNorth.jpeg"><img src="images/CybaNorth.jpeg" width="1024" height="768" loading="lazy" alt="The Groningen team in matching light blue shirts beside the competition floor."></a>
+        <figcaption>Inside the arena with Bert.</figcaption>
+      </figure>
+    </div>
+  </main>
+</body>
+</html>

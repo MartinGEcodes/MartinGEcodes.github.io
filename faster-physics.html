@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Faster Physics with Feyer.ai | Martin Gregory-Eaves</title>
+  <meta name="description" content="How Team Krillion accelerated a gravitational-wave detector simulation for Feyer's Faster Physics challenge at START Hack Munich.">
+  <link rel="stylesheet" href="project-detail.css">
+</head>
+<body>
+  <main>
+    <nav class="back" aria-label="Project navigation"><a href="projetcts.html">← Back to projects</a></nav>
+    <header>
+      <p class="eyebrow">START Hack Munich · November 2026</p>
+      <h1>Faster Physics with Feyer.ai</h1>
+      <p class="subtitle">At the Technical University of Munich, I joined Team Krillion to speed up the optical simulations used to design gravitational-wave detectors.</p>
+      <div class="tags"><span>Computational physics</span><span>Python / JAX</span><span>C++</span><span>Sparse linear algebra</span></div>
+    </header>
+
+    <figure>
+      <img src="images/krillion-team.webp" width="1440" height="960" alt="Three members of Team Krillion with laptops at their hackathon worktable.">
+      <figcaption>Our team at work during START Hack Munich.</figcaption>
+    </figure>
+
+    <h2>The challenge</h2>
+    <p><a href="https://www.feyer.ai/">Feyer</a> uses AI and physics simulators to search for new hardware designs. Its Faster Physics challenge centred on Differometor, a Python and JAX simulator. For a given arrangement of mirrors and other optical components, it predicts how sensitive a detector will be and how that sensitivity changes when a design parameter moves.</p>
+    <p>Our task was to cut the time for one complete evaluation, including setup and compilation. We had to keep all 101 frequencies, calculate gradients for all 193 design variables, and reproduce the reference results in double precision.</p>
+
+    <h2>Reusing one matrix factorisation</h2>
+    <p>At each frequency, the optical signal and the detector’s response to noise depend on the same system matrix. We factored that sparse matrix once and reused its factors for both solves. We also rewrote the quantum-noise calculation so that the detector variance could be read directly from the noise covariance and the detector response. That eliminated another solve.</p>
+    <p>We moved the solver into a native C++ engine. Its Gilbert–Peierls algorithm builds the sparse LU factors one column at a time, skipping entries that cannot contribute. We reused the factors again when calculating gradients and checked the sensitivity curve and gradients against the original simulator.</p>
+
+    <h2>Benchmark and award</h2>
+    <p>Our final engine completed the original benchmark in <strong>0.52 seconds on one CPU core</strong>. For a separate test, we called the C++ engine directly from Python, avoiding JAX startup and compilation. That run took about <strong>0.20 seconds</strong>. In our presentation, we compared it with the 58.9-second baseline and reported a speedup of more than 293×.</p>
+    <p>We placed third in the Feyer challenge and received a <strong>€300 cash prize</strong> as a team.</p>
+    <figure>
+      <img src="images/krillion-award.webp" width="1440" height="960" loading="lazy" alt="Team Krillion on stage beneath the Feyer Challenge third-place announcement.">
+      <figcaption>On stage for the Faster Physics award.</figcaption>
+    </figure>
+
+    <h2>Team presentation</h2>
+    <p>In <cite>A Krillion Times Faster</cite>, we walk through the matrix solves and show how each change affected runtime.</p>
+    <p class="file-links"><a href="pdfs/Team_Krillion.pdf">Open the slides (PDF)</a><a href="pdfs/Team_Krillion.pdf" download>Download the slides (PDF, 1.3 MB)</a></p>
+    <iframe class="slides" title="A Krillion Times Faster — Team Krillion’s 14-slide presentation" src="pdfs/Team_Krillion.pdf#view=FitH" loading="lazy"></iframe>
+  </main>
+</body>
+</html>

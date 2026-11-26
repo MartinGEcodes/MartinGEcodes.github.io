@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coffee Corner – Martin Gregory-Eaves</title>
+  <title>Projects – Martin Gregory-Eaves</title>
 
   <style>
     /* ---------- GLOBAL (same as landing + CV) ---------- */
@@ -266,6 +266,10 @@
 @media (max-width: 800px){
   .projects-grid{ grid-template-columns: 1fr; }
 }
+@media (max-width: 480px){
+  .card-top, .projects-filter{ flex-wrap: wrap; }
+  .projects-filter{ max-width: 100%; width: auto; border-radius: 16px; }
+}
 
   </style>
 </head>
@@ -294,16 +298,38 @@
       Besides this website, below you can find a few things I have worked on in the past.
       This space is meant to neatly organise all my personal projects I have started in order
       to learn more about a given topic. 
-      <div class="projects-filter" role="tablist" aria-label="Project category">
-      <button class="filter-btn is-active" data-filter="all" type="button">All</button>
-      <button class="filter-btn" data-filter="Engineering Physics" type="button">Engineering Physics</button>
-      <button class="filter-btn" data-filter="Finance" type="button">Finance</button>
+    </p>
+    <div class="projects-filter" role="group" aria-label="Project category">
+      <button class="filter-btn is-active" aria-pressed="true" data-filter="all" type="button">All</button>
+      <button class="filter-btn" aria-pressed="false" data-filter="Engineering Physics" type="button">Engineering Physics</button>
+      <button class="filter-btn" aria-pressed="false" data-filter="Finance" type="button">Finance</button>
     </div>
-  </header>
 
   <section class="projects-grid" aria-label="Project list">
 
     <!-- Physics -->
+    <article class="project-card" data-category="Engineering Physics">
+      <div class="card-top">
+        <a href="faster-physics.html"><h3>Faster Physics with Feyer.ai</h3></a>
+        <span class="badge badge-quant">Engineering Physics</span>
+      </div>
+      <p class="card-desc">At START Hack Munich, my team cut a gravitational-wave detector simulation down to half a second by reusing the same matrix factors across calculations.</p>
+      <div class="chips">
+        <span class="chip">C++</span><span class="chip">JAX</span><span class="chip">Sparse linear algebra</span>
+      </div>
+    </article>
+
+    <article class="project-card" data-category="Engineering Physics">
+      <div class="card-top">
+        <a href="cybanorth.html"><h3>CybaNorth’s robotic prosthetic hand</h3></a>
+        <span class="badge badge-quant">Engineering Physics</span>
+      </div>
+      <p class="card-desc">I led thumb actuation for the Groningen team’s CYBATHLON hand, selecting the motor and designing the mechanism that positioned the thumb for a grip.</p>
+      <div class="chips">
+        <span class="chip">Fusion 360</span><span class="chip">Arduino IDE</span><span class="chip">Prosthetics</span>
+      </div>
+    </article>
+
     <article class="project-card" data-category="Engineering Physics">
       <div class="card-top">
         <a href="dos.html"><h3>Density of States (DOS) visualisation</h3></a>
@@ -314,6 +340,7 @@
       </p>
       <div class="chips">
         <span class="chip">Python</span><span class="chip">Matplotlib</span>
+      </div>
     </article>
 
     <article class="project-card" data-category="Engineering Physics">
@@ -325,6 +352,7 @@
       </p>
       <div class="chips">
         <span class="chip">Arduino IDE</span>
+      </div>
     </article>
     <article class="project-card" data-category="Engineering Physics">
       <div class="card-top">
@@ -337,6 +365,7 @@
       <div class="chips">
         <span class="chip">Arduino IDE</span><span class="chip">Biomimetics</span><span class="chip">Solidworks</span>
         <span class="chip">3D Printing</span><span class="chip">Teensy 4.1</span><span class="chip">Python</span>
+      </div>
     </article>
 
     <!-- Finance -->
@@ -348,7 +377,7 @@
       <p class="card-desc">I have watched The Big Short and now want to understand what a stock option is...</p>
       
     </article>
-    </p>
+  </section>
   </main>
 <footer class="site-footer">© 2025 Martin Gregory-Eaves</footer>
 
@@ -359,8 +388,10 @@
 
   buttons.forEach(btn => {
     btn.addEventListener("click", () => {
-      buttons.forEach(b => b.classList.remove("is-active"));
-      btn.classList.add("is-active");
+      buttons.forEach(b => {
+        b.classList.toggle("is-active", b === btn);
+        b.setAttribute("aria-pressed", String(b === btn));
+      });
 
       const f = btn.dataset.filter;
       cards.forEach(card => {
